@@ -1,0 +1,10 @@
+# Archivos compilados
+bin/
+obj/
+
+# Configuración local
+*.user
+*.log
+
+# Visual Studio
+.vs/
