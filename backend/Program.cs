@@ -15,6 +15,7 @@ builder.Services.AddScoped<ITurnoRepository, TurnoRepository>();
 builder.Services.AddScoped<IConductorRepository, ConductorRepository>();
 builder.Services.AddScoped<IRegistroEntradaRepository, RegistroEntradaRepository>();
 builder.Services.AddScoped<IRegistroSalidaRepository, RegistroSalidaRepository>();
+builder.Services.AddScoped<IOrdenRepository, OrdenRepository>();
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
