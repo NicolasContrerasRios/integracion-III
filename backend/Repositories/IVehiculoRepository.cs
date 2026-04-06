@@ -6,6 +6,7 @@ namespace backend.Repositories
     {
         List<Vehiculo> ObtenerTodos();
         Vehiculo Agregar(Vehiculo vehiculo);
+        Vehiculo Modificar(Vehiculo vehiculo);
     }
     
 }

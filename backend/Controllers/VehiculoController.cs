@@ -38,7 +38,7 @@ namespace backend.Controllers
             return Ok(GetVehiculosConConductores(vehiculos, turnos, conductores, registrosEntrada, registrosSalida));
         }
 
-        [HttpPost]
+        [HttpPost("agregar")]
         public IActionResult Post([FromBody] VehiculoTurnoRequest request)
         {
             var vehiculo = new Vehiculo
@@ -66,7 +66,43 @@ namespace backend.Controllers
 
             return Ok();
         }
+        [HttpPost("modificar")]
+        public IActionResult Modificar([FromBody] VehiculoModificarRequest request)
+        {
+            var vehiculos = _repo.ObtenerTodos();
+            var vehiculo = vehiculos.FirstOrDefault(v => v.Patente == request.Patente);
+            if (vehiculo == null)
+            {
+                return NotFound("Vehículo no encontrado");
+            }
 
+            vehiculo.Estado = request.Estado;
+            _repo.Modificar(vehiculo);
+
+            var conductores = _conductorRepo.ObtenerTodos();
+            var conductor = conductores.FirstOrDefault(c => c.Nombre == request.Conductor);
+            if (conductor == null)
+            {
+                return BadRequest("Conductor no encontrado");
+            }
+
+            var turno = new Turno
+            {
+                Patente = request.Patente,
+                Rut = conductor.Rut,
+                Fecha = DateOnly.FromDateTime(DateTime.Now)
+            };
+            _turnoRepo.Agregar(turno);
+
+            return Ok();
+        }
+
+        public class VehiculoModificarRequest
+        {
+            public string Patente { get; set; }
+            public string Conductor { get; set; }
+            public string Estado { get; set; }
+        }
         public class VehiculoTurnoRequest
         {
             public string Patente { get; set; }
