@@ -39,9 +39,39 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Vehiculo vehiculo)
+        public IActionResult Post([FromBody] VehiculoTurnoRequest request)
         {
-            return Ok(_repo.Agregar(vehiculo));
+            var vehiculo = new Vehiculo
+            {
+                Patente = request.Patente,
+                Nombre = request.NombreVehiculo,
+                Estado = "activo"
+            };
+            _repo.Agregar(vehiculo);
+
+            var conductores = _conductorRepo.ObtenerTodos();
+            var conductor = conductores.FirstOrDefault(c => c.Nombre == request.NombreConductor);
+            if (conductor == null)
+            {
+                return BadRequest("Conductor no encontrado");
+            }
+
+            var turno = new Turno
+            {
+                Patente = request.Patente,
+                Rut = conductor.Rut,
+                Fecha = DateOnly.FromDateTime(DateTime.Now)
+            };
+            _turnoRepo.Agregar(turno);
+
+            return Ok();
+        }
+
+        public class VehiculoTurnoRequest
+        {
+            public string Patente { get; set; }
+            public string NombreVehiculo { get; set; }
+            public string NombreConductor { get; set; }
         }
 
         private IEnumerable<object> GetVehiculosConConductores(List<Vehiculo> vehiculos, List<Turno> turnos, List<Conductor> conductores, List<RegistroEntrada> registrosEntrada, List<RegistroSalida> registrosSalida)
@@ -58,7 +88,7 @@ namespace backend.Controllers
                 fecha = v.ObtenerUltimaFecha(registrosEntrada, registrosSalida),
                 hora = v.ObtenerUltimaHora(registrosEntrada, registrosSalida)
                 
-                
+
             }).ToList();
             return result;
         }
