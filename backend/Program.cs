@@ -11,8 +11,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IVehiculoRepository, VehiculoRepository>();
-
-
+builder.Services.AddScoped<ITurnoRepository, TurnoRepository>();
+builder.Services.AddScoped<IConductorRepository, ConductorRepository>();
+builder.Services.AddScoped<IRegistroEntradaRepository, RegistroEntradaRepository>();
+builder.Services.AddScoped<IRegistroSalidaRepository, RegistroSalidaRepository>();
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();

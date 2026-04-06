@@ -15,9 +15,21 @@ namespace backend.Data
         .ToList()
         .Find()
         .Remove()*/
+        public DbSet<Turno> Turnos { get; set; }
+
+        public DbSet<Conductor> Conductores { get; set; }
+        
+        public DbSet<RegistroEntrada> RegistroEntradas { get; set; }
+
+        public DbSet<RegistroSalida> RegistroSalidas { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Vehiculo>().ToTable("Vehiculo");
+            modelBuilder.Entity<Turno>().ToTable("Turnos");
+            modelBuilder.Entity<Conductor>().ToTable("Conductor");
+            modelBuilder.Entity<RegistroEntrada>().ToTable("Registro_Entrada");
+            modelBuilder.Entity<RegistroSalida>().ToTable("Registro_Salida");
+
         }
     }
 }
