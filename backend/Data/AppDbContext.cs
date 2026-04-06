@@ -24,6 +24,8 @@ namespace backend.Data
         public DbSet<RegistroSalida> RegistroSalidas { get; set; }
 
         public DbSet<Orden> Ordenes { get; set; }
+
+        public DbSet<Usuario> Usuarios { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Vehiculo>().ToTable("Vehiculo");
@@ -32,6 +34,7 @@ namespace backend.Data
             modelBuilder.Entity<RegistroEntrada>().ToTable("Registro_Entrada");
             modelBuilder.Entity<RegistroSalida>().ToTable("Registro_Salida");
             modelBuilder.Entity<Orden>().ToTable("Ordenes");
+            modelBuilder.Entity<Usuario>().ToTable("Usuario");
 
         }
     }

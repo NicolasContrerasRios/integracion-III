@@ -16,6 +16,7 @@ builder.Services.AddScoped<IConductorRepository, ConductorRepository>();
 builder.Services.AddScoped<IRegistroEntradaRepository, RegistroEntradaRepository>();
 builder.Services.AddScoped<IRegistroSalidaRepository, RegistroSalidaRepository>();
 builder.Services.AddScoped<IOrdenRepository, OrdenRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
