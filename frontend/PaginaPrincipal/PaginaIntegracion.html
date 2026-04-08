@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registros RegiX</title>
+
+    <link rel="stylesheet" href="estilopaginaintegracion.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- ENCABEZADO--> 
+<header class="encabezado-bar">
+
+    <div class="filtro-procesos">
+
+        <div class="filtro-btn" id="filtroBtn">
+            <img id="filtroImg" src="https://icones.pro/wp-content/uploads/2021/02/icone-de-la-maison-orange.png">
+            <span id="filtroTexto">Inicio</span> ▼
+        </div>
+
+        <div class="filtro-panel" id="filtroPanel">
+
+            <div class="filtro-item" data-value="inicio">
+                <img src="https://icones.pro/wp-content/uploads/2021/02/icone-de-la-maison-orange.png">
+                <div><h4>Inicio</h4></div>
+            </div>
+
+            <div class="filtro-item" data-value="ingresosalida">
+                <img src="https://png.pngtree.com/png-clipart/20250104/original/pngtree-cartoon-truck-and-cargo-box-png-image_5469536.png">
+                <div><h4>Ingreso y salida</h4></div>
+            </div>
+
+            <div class="filtro-item" data-value="vehiculos">
+                <img src="https://cdn-icons-png.flaticon.com/512/8552/8552019.png">
+                <div><h4>Vehículos</h4></div>
+            </div>
+
+            <div class="filtro-item" data-value="retrasos">
+                <img src="https://icones.pro/wp-content/uploads/2021/08/icone-x-avec-cercle-orange.png">
+                <div><h4>Retrasos</h4></div>
+            </div>
+
+            <div class="filtro-item" data-value="admin">
+                <img src="https://cdn-icons-png.flaticon.com/512/2734/2734226.png">
+                <div><h4>Administrador</h4></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="center">
+        <img src="logo.png" class="logo">
+    </div>
+
+    <div class="derecha">
+
+        <div class = "contenedor-modo">
+
+        <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" class="icono-modo">
+
+        <label class = "switch">
+            <input type="checkbox" id ="cambiarModo">
+            <span class = "slider"></span>
+        </label>
+
+        <img src="https://cdn-icons-png.flaticon.com/512/581/581601.png" class="icono-modo">
+
+        </div>
+
+        <button class="logout">Cerrar sesión</button>
+    </div>
+
+</header>
+
+<section id="vista-inicio" class="vista activa">
+
+    <section class="seccion-grafico">
+
+        <h2>Ordenes Completadas</h2>
+
+    <div class="paneles-info">
+
+        <!-- PANEL: órdenes completadas HOY -->
+        <div class="panel naranja">
+            <h3>Completadas hoy</h3>
+            <p id="cantidad-completadas-hoy" class="numero">0 <!-- backend llenará esto --></p>
+        </div>
+
+        <!-- PANEL: órdenes completadas MES -->
+        <div class="panel naranja">
+            <h3>Completadas en el mes</h3>
+            <p id="cantidad-completadas-mes" class="numero">0 <!-- backend llenará esto --></p>
+        </div>
+
+    </div>
+        <div class="contenedor-graficos">
+            <div class="top-grafico">
+            </div>
+            <canvas id="miGrafico"></canvas>
+        </div>
+
+    </section>
+
+</section>
+
+<section id="vista-ingresosalida" class="vista">
+    <h2 style="text-align:center;">Ingreso y Salida</h2>
+    <div class="barra-superior">
+
+    <div class="buscador">
+        <span class="icono-buscar">&#128269;</span>
+        <input type="text" placeholder="Buscar..." id="input-buscar-ingreso">
+    </div>
+
+    <div class="icono-calendario">
+        <input type="date" id ="fechaFiltro">
+    </div>
+
+</div>
+
+
+<div class="tabla-container">
+
+    <table class="tabla-ingreso">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Patente</th>
+                <th>Conductor</th>
+                <th>Fecha</th>
+                <th>Hora Ingreso</th>
+                <th>Hora Salida</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabla-ingreso">
+            <tr>
+                <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
+                <!-- backend llenará esto -->
+            </tr>
+        </tbody>
+    </table>
+        <div class="paginacion paginacion-izquierda">
+            <button id="btnPrevIngreso" class="btn-flecha">&#8592;</button>
+            
+            <span id="paginaActualIngreso">1</span>
+            
+            <button id="btnNextIngreso" class="btn-flecha">&#8594;</button>
+        </div>
+</div>
+</section>
+
+<section id="vista-vehiculos" class="vista">
+
+    <h2 style="text-align:center;">Vehículos</h2>
+
+<div class="tabla-container">
+
+    <table class="tabla-vehiculos">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Patente</th>
+                <th>Conductor</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th>Hora último registro</th>
+            </tr>
+        </thead>
+        
+        <tbody id="tabla-vehiculos-bd">
+            <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
+            <!-- backend llenará esto -->
+        </tbody>
+
+    </table>
+
+    <div class="paginacion paginacion-vehiculos">
+        <button id="btnPrevVehiculos" class="btn-flecha">&#8592;</button>
+
+        <span id="paginaActualVehiculos">1</span>
+
+        <button id="btnNextVehiculos" class="btn-flecha">&#8594;</button>
+    </div>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="vista-retrasos" class="vista">
+    
+    <h2 style="text-align:center;">Retrasos</h2>
+
+    <section class="contenedor-retrasos">
+
+        <div class="tabla-retrasos"> 
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Patente</th>
+                        <th>Fecha</th>
+                        <th>Horas tardadas</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaRetrasosBD">
+                    <tr>
+                        <td>
+                            <img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion">
+                        </td>
+                        <!-- backend llenará esto -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="panel-retrasos">
+
+            <h3>Fecha</h3>
+            <div class="campo"></div>
+
+            <div class="fila">
+                <div>
+                    <h3>Hora de Salida</h3>
+                    <div id="detalle-hora-salida" class="campo"><!-- backend llenará esto --></div>
+                </div>
+
+                <div>
+                    <h3>Horario</h3>
+                    <div id="detalle-horario" class="campo"><!-- backend llenará esto --></div>
+                </div>
+            </div>
+
+            <h3>Conductor</h3>
+            <div id="detalle-conductor" class="campo"><!-- backend llenará esto --></div>
+
+        </div>
+
+    </section>
+
+    <div class="tabla-container">
+        <div class="paginacion paginacion-izquierda">
+            <button id="btnPrevRetrasos" class="btn-flecha">&#8592;</button>
+            
+            <span id="paginaActualRetrasos">1</span>
+            
+            <button id="btnNextRetrasos" class="btn-flecha">&#8594;</button>
+        </div>
+    </div>
+
+</section>
+
+<section id="vista-admin" class="vista">
+
+    <h2 style="text-align:center;">Administrador</h2>
+
+    <div class="admin-top">
+
+    <div class="admin-botones">
+        <button id="boton-agregar-vehiculo" class="btn-admin activo">Agregar</button>
+        <button id="boton-modificar-vehiculo" class="btn-admin">Modificar</button>
+    </div>
+
+    </div>
+
+    <div id="panel-agregar-vehiculo" class="panel-admin activo">
+
+        <div class="tarjeta-admin">
+            <h3>Agregar Vehículo</h3>
+
+            <div class="form-grid">
+                <input id="ingresar-patente" placeholder="Patente">
+                <input id="ingresar-nombre-camion" placeholder="Nombre camión">
+                <input id="ingresar-conductor" placeholder="Conductor">
+            </div>
+
+            <button id="boton-guardar-vehiculo" class="btn-guardar">Agregar</button>
+        </div>
+
+    </div>
+
+    <div id="panel-modificar-vehiculo" class="panel-admin">
+
+        <div class="tarjeta-admin">
+            <h3>Modificar Vehículo</h3>
+
+            <div class="buscador-admin">
+                <input id="input-buscar-vehiculo" type="text" placeholder="Buscar vehículo...">
+            </div>
+
+            <div class="modificar-container">
+
+                <div id="lista-vehiculos" class="lista-vehiculos">
+                    <!-- backend llenará esto -->
+                </div>
+
+                <div class="form-modificar">
+                    <input id="modificar-conductor-modificar" placeholder="Conductor">
+                    <input id="modificar-estado-modificar" placeholder="Estado">
+
+                    <button id="boton-guardar-cambios" class="btn-guardar">Guardar</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <p>Integracion de competencias III</p>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="grafico.js"></script>
+<script src="admin.js"></script>
+
+
+</body>
+</html>
