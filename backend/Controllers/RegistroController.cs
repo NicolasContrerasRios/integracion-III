@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using backend.Domain;
+using backend.Infrastructure;
 using backend.Repositories;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,32 +50,88 @@ namespace backend.Controllers
             var turnos = _turnoRepo.ObtenerTodos();
             var conductores = _conductorRepo.ObtenerTodos();
 
-            var resultado = ObtenerRegistrosConHoras(registrosEntrada, registrosSalida, ordenes, turnos, conductores);
+            var resultado = ObtenerRegistrosConAtrasos(registrosEntrada, registrosSalida, ordenes, turnos, conductores);
             return Ok(resultado);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Orden orden)
+        public IActionResult Post([FromBody] DispositivoIOT dispositivo)
         {
-            try
+            if (dispositivo == null)
             {
-                if (orden == null)
+                return BadRequest(new { mensaje = "Datos del dispositivo no pueden ser nulos." });
+            }
+
+            var tipo = dispositivo.ObtenerTipoRegistro();
+            var ordenes = _repo.ObtenerTodos();
+
+            if (tipo == "entrada")
+            {
+                var entrada = new RegistroEntrada
                 {
-                    return BadRequest("La orden es requerida");
+                    Patente = dispositivo.Patente,
+                    Fecha = dispositivo.Fecha,
+                    Hora = dispositivo.Hora
+                };
+
+                var entradaGuardada = _registroEntradaRepo.Agregar(entrada);
+                var salidas = _registroSalidaRepo.ObtenerTodos();
+
+                if (ObtenerSalidaAnteriorSinOrden(dispositivo.Patente, salidas, ordenes, out var salidaNoRegistrada))
+                {
+                    var orden = new Orden
+                    {
+                        Id_Entrada = entradaGuardada.Id_Entrada,
+                        Id_Salida = salidaNoRegistrada.Id_Salida,
+                        Horas_Totales = Orden.CalcularDiferenciaHoras(salidaNoRegistrada.Hora, entradaGuardada.Hora)
+                    };
+
+                    var ordenGuardada = _repo.Agregar(orden);
+                    return Ok(new
+                    {
+                        mensaje = "Entrada registrada y orden creada.",
+                        entrada = entradaGuardada,
+                        salida = salidaNoRegistrada,
+                        orden = ordenGuardada
+                    });
                 }
 
-                var ordenAgregada = _repo.Agregar(orden);
-                if (ordenAgregada == null)
+                return Ok(new
                 {
-                    return BadRequest("No se pudo agregar la orden");
-                }
+                    mensaje = "Entrada registrada.",
+                    entrada = entradaGuardada
+                });
+            }
 
-                return Ok("Orden agregada correctamente");
-            }
-            catch (Exception ex)
+            if (tipo == "salida")
             {
-                return BadRequest($"Error: {ex.Message}");
+                var salida = new RegistroSalida
+                {
+                    Patente = dispositivo.Patente,
+                    Fecha = dispositivo.Fecha,
+                    Hora = dispositivo.Hora
+                };
+
+                var salidaGuardada = _registroSalidaRepo.Agregar(salida);
+                return Ok(new
+                {
+                    mensaje = "Salida registrada.",
+                    salida = salidaGuardada
+                });
             }
+
+            return BadRequest(new { mensaje = "Tipo de registro inválido. Use 'entrada' o 'salida'." });
+        }
+
+        private bool ObtenerSalidaAnteriorSinOrden(string patente, List<RegistroSalida> salidas, List<Orden> ordenes, out RegistroSalida salidaNoRegistrada)
+        {
+            var salidasEnOrden = ordenes.Select(o => o.Id_Salida).ToHashSet();
+            salidaNoRegistrada = salidas
+                .Where(s => s.Patente == patente && !salidasEnOrden.Contains(s.Id_Salida))
+                .OrderByDescending(s => s.Fecha.ToDateTime(s.Hora))
+                .FirstOrDefault();
+
+            return salidaNoRegistrada != null;
         }
 
         private object ObtenerRegistrosConDetalles(List<RegistroEntrada> registrosEntrada, List<RegistroSalida> registrosSalida, List<Turno> turnos, List<Conductor> conductores)
@@ -104,7 +161,7 @@ namespace backend.Controllers
             };
         }
 
-        private object ObtenerRegistrosConHoras(List<RegistroEntrada> registrosEntrada, List<RegistroSalida> registrosSalida, List<Orden> ordenes, List<Turno> turnos, List<Conductor> conductores)
+        private object ObtenerRegistrosConAtrasos(List<RegistroEntrada> registrosEntrada, List<RegistroSalida> registrosSalida, List<Orden> ordenes, List<Turno> turnos, List<Conductor> conductores)
         {
             var registro = ordenes.Select(o =>
             {
