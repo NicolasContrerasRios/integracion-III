@@ -8,12 +8,12 @@ body {
     flex-direction: column;
     margin: 0;
     font-family: 'Red Hat Mono', monospace;
-    background: #ffffff;
+    background: #f4f0f0;
 }
 
 html, body {
     height: 100%;
-}
+}   
 
 .vista {
     display: none;
@@ -45,7 +45,7 @@ html, body {
     border-radius: 5px;
 }
 
-.hencabezado-bar.normal {
+.encabezado-bar.normal {
     background: #222;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
@@ -184,13 +184,13 @@ html, body {
 .paneles-info {
     display: flex;
     justify-content: center;
-    gap: 2vw; /* antes 20px */
+    gap: 2vw; 
     margin-bottom: 2.5vh;
 }
 
 .panel {
-    width: 18vw; /* antes 280px */
-    padding: 1.5vh 2vw; /* antes 15px 20px */
+    width: 18vw; 
+    padding: 1.5vh 2vw; 
     border-radius: 1.2vw;
     text-align: left;
     color: white;
@@ -243,7 +243,7 @@ html, body {
 .tabla-ingreso th {
     background: #ff8533;
     color: white;
-    padding: 12px; /* se mantiene fijo */
+    padding: 12px; 
     font-weight: bold;
     border-bottom: 2px solid #ff6600;
 }
@@ -255,39 +255,54 @@ html, body {
     border-bottom: 1px solid #ddd;
 }
 
+.tabla-vehiculos tbody tr:hover,
+.tabla-ingreso tbody tr:hover {
+    background: #fff3eb;
+    transition: 0,2s;
+}
+
+.tabla-vehiculos tbody tr:nth-child(even),
+.tabla-ingreso tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+
 /* TABLA RETRASOS */
 .contenedor-retrasos {
     width: 80%;
     margin: 4vh auto;
     display: flex;
-    border: 4px solid black;
     border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .tabla-retrasos {
     width: 60%;
-    border-right: 2px solid black;
+    border-right: 2px solid #ccc;
 }
 
 .tabla-retrasos table {
     width: 100%;
     border-collapse: collapse;
+    background: white;
 }
 
 .tabla-retrasos th {
     background: #ff8533;
     color: white;
-    padding: 8px; /* se mantiene fijo */
+    padding: 8px; 
     font-weight: bold;
     border-bottom: 2px solid #ff6600;
 }
 
 .tabla-retrasos td {
-    padding: 20px 10px; /* se mantiene fijo */
+    padding: 20px 10px; 
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
+
+
 
 /* ========================
    ICONOS
@@ -391,6 +406,7 @@ html, body {
 .panel-retrasos {
     width: 45%;
     padding: 3vh;
+    background: white;
 }
 
 .panel-retrasos h3 {
@@ -594,9 +610,28 @@ body.dark-mode .encabezado-bar {
 body.dark-mode .contenedor-graficos,
 body.dark-mode .tabla-vehiculos,
 body.dark-mode .tabla-ingreso,
+body.dark-mode .tabla-retrasos,
+body.dark-mode .tabla-retrasos table,
 body.dark-mode .tarjeta-admin {
     background: #1e1e1e;
     color: white;
+}
+
+body.dark-mode .panel-retrasos {
+    background: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .contenedor-retrasos {
+    border-color: #444;
+}
+
+body.dark-mode .tabla-retrasos {
+    border-right-color: #444;
+}
+
+body.dark-mode .tabla-retrasos td {
+    border-bottom-color: #333;
 }
 
 body.dark-mode th {
