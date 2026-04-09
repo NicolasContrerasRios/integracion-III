@@ -45,11 +45,11 @@ function cargarHistorial() {
                 tabla.innerHTML += `
                     <tr>
                         <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
-                        <td>${r.Patente}</td>
-                        <td>${r.Conductor}</td>
-                        <td>${r.Fecha}</td>
+                        <td>${r.patente}</td>
+                        <td>${r.conductor}</td>
+                        <td>${r.fecha}</td>
                         <td>${r.tipo}</td>
-                        <td>${r.Hora}</td>
+                        <td>${r.hora}</td>
                     </tr>
                 `;
             });
