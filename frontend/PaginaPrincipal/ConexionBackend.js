@@ -41,24 +41,17 @@ function cargarHistorial() {
             });
 
             // 🔹 PINTAR TABLA
-            todos.forEach(registro => {
-
-                const fila = document.createElement("tr");
-
-                fila.innerHTML = `
-                    <td>
-                        <img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion">
-                    </td>
-                    <td>${registro.patente}</td>
-                    <td>${registro.conductor}</td>
-                    <td>${registro.fecha}</td>
-                    <td class="${registro.tipo === "Entrada" ? "entrada" : "salida"}">
-                        ${registro.tipo}
-                    </td>
-                    <td>${registro.hora}</td>
+            todos.forEach(r => {
+                tabla.innerHTML += `
+                    <tr>
+                        <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
+                        <td>${r.Patente}</td>
+                        <td>${r.Conductor}</td>
+                        <td>${r.Fecha}</td>
+                        <td>${r.tipo}</td>
+                        <td>${r.Hora}</td>
+                    </tr>
                 `;
-
-                tabla.appendChild(fila);    
             });
 
         })
