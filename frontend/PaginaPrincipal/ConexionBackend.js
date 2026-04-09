@@ -11,12 +11,16 @@ function cargarHistorial() {
     fetch("http://localhost:5087/api/Registro/historial")
         .then(response => response.json())
         .then(data => {
-        console.log("DATA:", data);
+            console.log("DATA:", data);
 
             const tabla = document.getElementById("tabla-ingreso");
             tabla.innerHTML = "";
 
             let todos = [];
+
+            // ✅ IMPORTANTE
+            let entradas = data.entradas || data.Entradas || [];
+            let salidas = data.salidas || data.Salidas || [];
 
             // 🔹 ENTRADAS
             entradas.forEach(e => {
@@ -28,8 +32,8 @@ function cargarHistorial() {
                     tipo: "Entrada"
                 });
             });
-            
-            //SALIDAS
+
+            // 🔹 SALIDAS
             salidas.forEach(s => {
                 todos.push({
                     patente: s.patente || s.Patente,
