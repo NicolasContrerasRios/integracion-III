@@ -17,6 +17,11 @@ namespace backend.Domain
             var diferencia = hora1 > hora2 ? hora1 - hora2 : hora2 - hora1;
             return (int)diferencia.TotalHours;
         }
-        
+
+        public bool EsAtraso(int hora)
+        {
+            int horasMaximasTardadas = 6;
+            return hora >= horasMaximasTardadas;
+        }
     }
 }

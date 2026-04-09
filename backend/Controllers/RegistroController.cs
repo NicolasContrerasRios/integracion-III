@@ -50,7 +50,9 @@ namespace backend.Controllers
             var turnos = _turnoRepo.ObtenerTodos();
             var conductores = _conductorRepo.ObtenerTodos();
 
-            var resultado = ObtenerRegistrosConAtrasos(registrosEntrada, registrosSalida, ordenes, turnos, conductores);
+            var ordenesConAtraso = ordenes.Where(o => o.EsAtraso(o.Horas_Totales)).ToList();
+            var resultado = ObtenerRegistrosConAtrasos(registrosEntrada, registrosSalida, ordenesConAtraso, turnos, conductores);
+
             return Ok(resultado);
         }
 
