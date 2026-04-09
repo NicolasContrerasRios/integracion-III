@@ -46,7 +46,7 @@ function cargarHistorial() {
 
             // 🔥 ORDENAR POR FECHA Y HORA
             todos.sort((a, b) => {
-                return new Date(a.fecha + " " + a.hora) - new Date(b.fecha + " " + b.hora);
+                return new Date(b.fecha + " " + b.hora) - new Date(a.fecha + " " + a.hora);
             });
 
             // 🔹 PINTAR TABLA
