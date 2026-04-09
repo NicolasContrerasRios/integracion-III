@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function cargarHistorial() {
     console.log("Entró a cargarHistorial");
 
-    fetch("http://localhost:5087/api/registro/historial")
+    fetch("http://localhost:5087/api/Registro/historial")
         .then(response => response.json())
         .then(data => {
         console.log("DATA:", data);
@@ -19,23 +19,23 @@ function cargarHistorial() {
             let todos = [];
 
             // 🔹 ENTRADAS
-            data.Entradas.forEach(e => {
+            entradas.forEach(e => {
                 todos.push({
-                    patente: e.patente,
-                    conductor: e.conductor,
-                    fecha: e.fecha,
-                    hora: e.hora,
+                    patente: e.patente || e.Patente,
+                    conductor: e.conductor || e.Conductor,
+                    fecha: e.fecha || e.Fecha,
+                    hora: e.hora || e.Hora,
                     tipo: "Entrada"
                 });
             });
-
-            // 🔹 SALIDAS
-            data.Salidas.forEach(s => {
+            
+            //SALIDAS
+            salidas.forEach(s => {
                 todos.push({
-                    patente: s.patente,
-                    conductor: s.conductor,
-                    fecha: s.fecha,
-                    hora: s.hora,
+                    patente: s.patente || s.Patente,
+                    conductor: s.conductor || s.Conductor,
+                    fecha: s.fecha || s.Fecha,
+                    hora: s.hora || s.Hora,
                     tipo: "Salida"
                 });
             });
