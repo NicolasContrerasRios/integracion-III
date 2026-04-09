@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function cargarHistorial() {
 
-    fetch("http://0.0.0.0:5087/api/registro/historial")
+    fetch("http://localhost:5087/api/registro/historial")
         .then(response => response.json())
         .then(data => {
 
