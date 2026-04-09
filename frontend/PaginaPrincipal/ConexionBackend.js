@@ -14,7 +14,7 @@ function cargarHistorial() {
             let todos = [];
 
             // 🔹 ENTRADAS
-            data.entradas.forEach(e => {
+            data.Entradas.forEach(e => {
                 todos.push({
                     patente: e.patente,
                     conductor: e.conductor,
@@ -25,7 +25,7 @@ function cargarHistorial() {
             });
 
             // 🔹 SALIDAS
-            data.salidas.forEach(s => {
+            data.Salidas.forEach(s => {
                 todos.push({
                     patente: s.patente,
                     conductor: s.conductor,
