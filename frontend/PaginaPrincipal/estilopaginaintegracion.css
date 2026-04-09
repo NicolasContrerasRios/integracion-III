@@ -674,3 +674,14 @@ body.dark-mode footer {
 .switch {
     margin: 0 5px;
 }
+
+/*ENTRADA Y SALIDA COLORES*/
+.entrada {
+    color: green;
+    font-weight: bold;
+}
+
+.salida {
+    color: red;
+    font-weight: bold;
+}
