@@ -1,12 +1,17 @@
+console.log("JS funcionando");
+
 document.addEventListener("DOMContentLoaded", () => {
     cargarHistorial();
+    
 });
 
 function cargarHistorial() {
+    console.log("Entró a cargarHistorial");
 
     fetch("http://localhost:5087/api/registro/historial")
         .then(response => response.json())
         .then(data => {
+        console.log("DATA:", data);
 
             const tabla = document.getElementById("tabla-ingreso");
             tabla.innerHTML = "";
