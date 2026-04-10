@@ -243,10 +243,20 @@ function cargarConductores() {
             const select = document.getElementById("ingresar-conductor");
             select.innerHTML = '<option value="">Seleccionar conductor</option>';
 
+            // 🔥 eliminar duplicados por rut
+            const unicos = {};
+
             data.forEach(c => {
+                if (!unicos[c.rut]) {
+                    unicos[c.rut] = c;
+                }
+            });
+
+            // 🔥 llenar combobox
+            Object.values(unicos).forEach(c => {
                 select.innerHTML += `
                     <option value="${c.rut}">
-                        ${c.conductor.nombre}
+                        ${c.nombre}
                     </option>
                 `;
             });
