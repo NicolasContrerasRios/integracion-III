@@ -202,7 +202,7 @@ function agregarVehiculo() {
         rutConductor: rutConductor
     };
 
-    fetch("http://localhost:5087/api/vehiculo", {
+    fetch("http://localhost:5087/api/vehiculo/agregar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
