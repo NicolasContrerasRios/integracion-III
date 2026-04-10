@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarConductores();
     cargarListaVehiculos();
     cargarEstados();
+    cargarDatosGrafico(); 
+    setInterval(cargarDatosGrafico, 5000);
 
     document.getElementById("boton-guardar-vehiculo")
     .addEventListener("click", agregarVehiculo);
@@ -375,16 +377,4 @@ function guardarCambios() {
         console.error(err);
         alert("Error al actualizar");
     });
-}
-
-function cargarEstados() {
-
-    const select = document.getElementById("modificar-estado-modificar");
-
-    select.innerHTML = `
-        <option value="">Seleccionar estado</option>
-        <option value="Disponible">Disponible</option>
-        <option value="En transito">En transito</option>
-        <option value="Fuera de servicio">Fuera de servicio</option>
-    `;
 }

@@ -48,88 +48,56 @@ function actualizarGrafico(labels, datos) {
     grafico.update();
 }
 
-
-// ================== CONEXIÓN BACKEND ==================
-
 function cargarDatosGrafico() {
-    fetch("http://localhost:3000/grafico") // cambia por el backend
+    fetch("http://localhost:5087/api/orden")
         .then(res => res.json())
         .then(data => {
-            actualizarGrafico(data.labels, data.datos);
+
+            const conteo = {};
+
+            data.forEach(orden => {
+
+                if (!orden.fechaEntrada) return;
+
+                const fecha = orden.fechaEntrada.split("T")[0];
+
+                conteo[fecha] = (conteo[fecha] || 0) + 1;
+            });
+
+            const labels = Object.keys(conteo)
+                .sort((a, b) => new Date(a) - new Date(b));
+
+            const valores = labels.map(fecha => conteo[fecha]);
+
+            actualizarGrafico(labels, valores);
+
+            actualizarPaneles(data);
         })
-        .catch(error => {
-            console.error("Error:", error);
-        });
+        .catch(err => console.error("Error gráfico:", err));
 }
 
-// cargar al inicio
-cargarDatosGrafico();
+function actualizarPaneles(data) {
 
-// actualizar cada 5 segundos automáticamente
-setInterval(cargarDatosGrafico, 5000);
+    const hoy = new Date().toISOString().split("T")[0];
+    const mes = new Date().getMonth();
+    const anio = new Date().getFullYear();
 
+    let hoyCount = 0;
+    let mesCount = 0;
 
-// ================== MENÚ SUPERIOR ==================
+    data.forEach(o => {
 
-const filtroBtn = document.getElementById("filtroBtn");
-const filtroPanel = document.getElementById("filtroPanel");
+        const fecha = new Date(o.fechaEntrada);
 
-filtroBtn.addEventListener("click", () => {
-    filtroPanel.style.display =
-        filtroPanel.style.display === "block" ? "none" : "block";
-});
+        if (o.fechaEntrada.split("T")[0] === hoy) {
+            hoyCount++;
+        }
 
-
-// ================== CAMBIO DE VISTAS ==================
-
-const filtroImg = document.getElementById("filtroImg");
-const filtroTexto = document.getElementById("filtroTexto");
-
-document.querySelectorAll(".filtro-item").forEach(item => {
-    item.addEventListener("click", () => {
-
-        let valor = item.getAttribute("data-value");
-        let img = item.querySelector("img").src;
-        let texto = item.querySelector("h4").innerText;
-
-        // actualizar botón
-        filtroImg.src = img;
-        filtroTexto.innerText = texto;
-
-        // ocultar vistas
-        document.querySelectorAll(".vista").forEach(v => {
-            v.classList.remove("activa");
-        });
-
-        // mostrar vista
-        document.getElementById("vista-" + valor).classList.add("activa");
-
-        // cerrar panel
-        filtroPanel.style.display = "none";
+        if (fecha.getMonth() === mes && fecha.getFullYear() === anio) {
+            mesCount++;
+        }
     });
-});
 
-// cerrarse si se hace un click fuera
-document.addEventListener("click", (e) => {
-    if (!document.querySelector(".filtro-procesos").contains(e.target)) {
-        filtroPanel.style.display = "none";
-    }
-});
-
-
-// ================== EFECTO DEL ENCABEZADO ==================
-
-const header = document.querySelector(".encabezado-bar");
-
-header.classList.add("normal");
-
-window.addEventListener("scroll", () => {
-    if (window.scrollY > 50) {
-        header.classList.remove("normal");
-        header.classList.add("transparente");
-    } else {
-        header.classList.remove("transparente");
-        header.classList.add("normal");
-    }
-});
-
+    document.getElementById("cantidad-completadas-hoy").textContent = hoyCount;
+    document.getElementById("cantidad-completadas-mes").textContent = mesCount;
+}
