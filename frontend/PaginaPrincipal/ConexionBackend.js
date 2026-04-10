@@ -180,7 +180,6 @@ function cargarVehiculos() {
 }
 
 //ADMINISTRADOR
-
 function agregarVehiculo() {
 
     const patente = document.getElementById("ingresar-patente").value.trim();
@@ -235,7 +234,7 @@ function agregarVehiculo() {
 
 function cargarConductores() {
 
-    fetch("http://localhost:5087/api/conductor")
+    fetch("http://localhost:5087/api/vehiculo")
         .then(res => res.json())
         .then(data => {
 
