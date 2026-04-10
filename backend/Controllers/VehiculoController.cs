@@ -60,7 +60,7 @@ namespace backend.Controllers
             {
                 Patente = request.Patente,
                 Nombre = request.NombreVehiculo,
-                Estado = "activo"
+                Estado = "Disponible"
             };
             _repo.Agregar(vehiculo);
 
@@ -79,7 +79,7 @@ namespace backend.Controllers
             };
             _turnoRepo.Agregar(turno);
 
-            return Ok();
+            return Ok("Enviado correctamente");
         }
         [HttpPost("modificar")]
         public IActionResult Modificar([FromBody] VehiculoModificarRequest request)
@@ -109,7 +109,7 @@ namespace backend.Controllers
             };
             _turnoRepo.Agregar(turno);
 
-            return Ok();
+            return Ok("Enviado correctamente");
         }
 
         public class VehiculoModificarRequest
