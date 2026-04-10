@@ -234,7 +234,7 @@ function agregarVehiculo() {
 
 function cargarConductores() {
 
-    fetch("http://localhost:5087/api/vehiculo")
+    fetch("http://localhost:5087/api/vehiculo/conductores")
         .then(res => res.json())
         .then(data => {
 
