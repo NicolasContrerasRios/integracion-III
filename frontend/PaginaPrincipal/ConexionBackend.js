@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarVehiculos();
     cargarConductores();
     cargarListaVehiculos();
-    cargarEstados();
     cargarDatosGrafico(); 
     setInterval(cargarDatosGrafico, 5000);
 
