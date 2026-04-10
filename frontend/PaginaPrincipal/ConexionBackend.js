@@ -198,8 +198,8 @@ function agregarVehiculo() {
 
     const nuevoVehiculo = {
         patente: patente,
-        nombre: nombre,
-        rut: rutConductor
+        NombreVehiculo: nombre,
+        RutConductor: rutConductor
     };
 
     console.log("ENVIANDO:", nuevoVehiculo);
@@ -211,15 +211,19 @@ function agregarVehiculo() {
         },
         body: JSON.stringify(nuevoVehiculo)
     })
-    .then(res => {
+    .then(async res => {
+        const texto = await res.text(); // 🔥 leer respuesta real
+
+        console.log("RESPUESTA BACKEND:", texto);
+
         if (!res.ok) {
-            throw new Error("Error en el servidor");
+            throw new Error(texto);
         }
-        return res.json();
+
+        return JSON.parse(texto);
     })
     .then(data => {
         console.log("Vehículo guardado:", data);
-
         alert("Vehículo agregado correctamente");
 
         document.getElementById("ingresar-patente").value = "";
@@ -229,8 +233,8 @@ function agregarVehiculo() {
         cargarVehiculos();
     })
     .catch(err => {
-        console.error("Error:", err);
-        alert("Error al guardar");
+        console.error("Error REAL:", err.message);
+        alert("Error: " + err.message);
     });
 }
 
