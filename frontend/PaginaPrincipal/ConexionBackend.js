@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarHistorial();
     cargarRetrasos();
     cargarVehiculos();
+    cargarConductores();
+
+    document.getElementById("boton-guardar-vehiculo")
+    .addEventListener("click", agregarVehiculo);
     
 });
 
@@ -135,7 +139,7 @@ function mostrarDetalle(patente, detalles) {
     campos[0].textContent = detalle.fecha;
 }
 
-
+//TABLA VEHICULOS
 function cargarVehiculos() {
 
     fetch("http://localhost:5087/api/Vehiculo") 
@@ -173,4 +177,81 @@ function cargarVehiculos() {
 
         })
         .catch(err => console.error("Error vehículos:", err));
+}
+
+//ADMINISTRADOR
+
+function agregarVehiculo() {
+
+    const patente = document.getElementById("ingresar-patente").value.trim();
+    const nombre = document.getElementById("ingresar-nombre-camion").value.trim();
+    const rutConductor = document.getElementById("ingresar-conductor").value;
+
+    // 🔥 VALIDACIÓN
+    if (!patente || !nombre || !rutConductor) {
+        alert("Completa todos los campos");
+        return;
+    }
+
+    // 🔥 CONFIRMACIÓN
+    const confirmar = confirm("¿Seguro que quieres agregar este vehículo?");
+    if (!confirmar) return;
+
+    const nuevoVehiculo = {
+        patente: patente,
+        nombre: nombre,
+        rutConductor: rutConductor
+    };
+
+    fetch("http://localhost:5087/api/vehiculo", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(nuevoVehiculo)
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("Error en el servidor");
+        }
+        return res.json();
+    })
+    .then(data => {
+        console.log("Vehículo guardado:", data);
+
+        alert("Vehículo agregado correctamente");
+
+        document.getElementById("ingresar-patente").value = "";
+        document.getElementById("ingresar-nombre-camion").value = "";
+        document.getElementById("ingresar-conductor").value = "";
+
+        cargarVehiculos();
+    })
+    .catch(err => {
+        console.error("Error:", err);
+        alert("Error al guardar");
+    });
+}
+
+function cargarConductores() {
+
+    fetch("http://localhost:5087/api/conductor")
+        .then(res => res.json())
+        .then(data => {
+
+            console.log("CONDUCTORES:", data);
+
+            const select = document.getElementById("ingresar-conductor");
+            select.innerHTML = '<option value="">Seleccionar conductor</option>';
+
+            data.forEach(c => {
+                select.innerHTML += `
+                    <option value="${c.rut}">
+                        ${c.nombre}
+                    </option>
+                `;
+            });
+
+        })
+        .catch(err => console.error("Error conductores:", err));
 }
