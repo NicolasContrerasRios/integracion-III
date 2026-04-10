@@ -246,7 +246,7 @@ function cargarConductores() {
             data.forEach(c => {
                 select.innerHTML += `
                     <option value="${c.rut}">
-                        ${c.nombre}
+                        ${c.conductor.nombre}
                     </option>
                 `;
             });
