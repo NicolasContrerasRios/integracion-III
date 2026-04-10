@@ -5,9 +5,14 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarRetrasos();
     cargarVehiculos();
     cargarConductores();
+    cargarListaVehiculos();
+    cargarEstados();
 
     document.getElementById("boton-guardar-vehiculo")
     .addEventListener("click", agregarVehiculo);
+
+    document.getElementById("boton-guardar-cambios")
+    .addEventListener("click", guardarCambios);
     
 });
 
@@ -186,13 +191,13 @@ function agregarVehiculo() {
     const nombre = document.getElementById("ingresar-nombre-camion").value.trim();
     const rutConductor = document.getElementById("ingresar-conductor").value;
 
-    // 🔥 VALIDACIÓN
+    // VALIDACIÓN
     if (!patente || !nombre || !rutConductor) {
         alert("Completa todos los campos");
         return;
     }
 
-    // 🔥 CONFIRMACIÓN
+    // CONFIRMACIÓN
     const confirmar = confirm("¿Seguro que quieres agregar este vehículo?");
     if (!confirmar) return;
 
@@ -212,8 +217,7 @@ function agregarVehiculo() {
         body: JSON.stringify(nuevoVehiculo)
     })
     .then(async res => {
-        const texto = await res.text(); // 🔥 leer respuesta real
-
+        const texto = await res.text(); 
         console.log("RESPUESTA BACKEND:", texto);
 
         if (!res.ok) {
@@ -246,10 +250,12 @@ function cargarConductores() {
 
             console.log("CONDUCTORES:", data);
 
-            const select = document.getElementById("ingresar-conductor");
-            select.innerHTML = '<option value="">Seleccionar conductor</option>';
+            const selectAgregar = document.getElementById("ingresar-conductor");
+            const selectModificar = document.getElementById("modificar-conductor-modificar");
 
-            // 🔥 eliminar duplicados por rut
+            selectAgregar.innerHTML = '<option value="">Seleccionar conductor</option>';
+            selectModificar.innerHTML = '<option value="">Seleccionar conductor</option>';
+
             const unicos = {};
 
             data.forEach(c => {
@@ -258,15 +264,127 @@ function cargarConductores() {
                 }
             });
 
-            // 🔥 llenar combobox
             Object.values(unicos).forEach(c => {
-                select.innerHTML += `
-                    <option value="${c.rut}">
-                        ${c.nombre}
-                    </option>
-                `;
+
+                const option = `<option value="${c.rut}">${c.nombre}</option>`;
+
+                selectAgregar.innerHTML += option;
+                selectModificar.innerHTML += option;
             });
 
         })
         .catch(err => console.error("Error conductores:", err));
+}
+
+
+function cargarListaVehiculos() {
+
+    fetch("http://localhost:5087/api/Vehiculo")
+        .then(res => res.json())
+        .then(data => {
+
+            const lista = document.getElementById("lista-vehiculos");
+            lista.innerHTML = "";
+
+            data.forEach(v => {
+
+                const item = document.createElement("p");
+                item.textContent = v.patente;
+
+                // 🔥 CLICK
+                item.addEventListener("click", () => {
+                    seleccionarVehiculo(v);
+                });
+
+                lista.appendChild(item);
+            });
+
+        })
+        .catch(err => console.error("Error lista vehículos:", err));
+}
+
+let vehiculoSeleccionado = null;
+
+function seleccionarVehiculo(v) {
+
+    vehiculoSeleccionado = v;
+
+    // 🔥 estado
+    document.getElementById("modificar-estado-modificar").value = v.estado || "";
+
+    // 🔥 conductor → buscar por nombre
+    const select = document.getElementById("modificar-conductor-modificar");
+
+    for (let option of select.options) {
+        if (option.text === v.conductor?.nombre) {
+            select.value = option.value;
+            break;
+        }
+    }
+}
+
+function guardarCambios() {
+
+    if (!vehiculoSeleccionado) {
+        alert("Selecciona un vehículo primero");
+        return;
+    }
+
+    const rutConductor = document.getElementById("modificar-conductor-modificar").value;
+    const estado = document.getElementById("modificar-estado-modificar").value.trim();
+
+    if (!rutConductor || !estado) {
+        alert("Completa los campos");
+        return;
+    }
+
+    const confirmar = confirm("¿Guardar cambios?");
+    if (!confirmar) return;
+
+    const vehiculoModificado = {
+        patente: vehiculoSeleccionado.patente,
+        rut: rutConductor,
+        estado: estado
+    };
+
+    console.log("ENVIANDO:", vehiculoModificado);
+
+    fetch("http://localhost:5087/api/vehiculo/modificar", {
+        method: "PUT", // o POST según tu backend
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(vehiculoModificado)
+    })
+    .then(async res => {
+        const texto = await res.text();
+        console.log("RESPUESTA:", texto);
+
+        if (!res.ok) throw new Error(texto);
+
+        return texto ? JSON.parse(texto) : {};
+    })
+    .then(() => {
+        alert("Vehículo actualizado");
+
+        // 🔥 refrescar TODO
+        cargarVehiculos();
+        cargarListaVehiculos();
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error al actualizar");
+    });
+}
+
+function cargarEstados() {
+
+    const select = document.getElementById("modificar-estado-modificar");
+
+    select.innerHTML = `
+        <option value="">Seleccionar estado</option>
+        <option value="Disponible">Disponible</option>
+        <option value="En transito">En transito</option>
+        <option value="Fuera de servicio">Fuera de servicio</option>
+    `;
 }

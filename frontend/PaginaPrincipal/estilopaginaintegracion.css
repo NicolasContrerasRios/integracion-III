@@ -725,7 +725,7 @@ body.dark-mode footer {
     font-weight: bold;
 }
 
-/* COMBOBOX ESTILO */
+/* COMBOBOX ESTILO AGREGAR */
 .form-grid select {
     padding: 8px;
     border-radius: 15px;
@@ -749,4 +749,32 @@ body.dark-mode .form-grid select {
     background: #1e1e1e;
     color: white;
     border-color: #ff8533;
+}
+
+/* COMBOBOX ESTILO MODIFICAR */
+.form-modificar select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 25px;
+    border: 2px solid orange;
+    background-color: white;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    transition: 0.2s;
+    appearance: none;
+}
+
+.form-modificar select:hover {
+    border-color: darkorange;
+}
+
+.form-modificar select:focus {
+    border-color: orangered;
+    box-shadow: 0 0 5px rgba(255, 140, 0, 0.5);
+}
+
+.form-modificar select option {
+    background-color: white;
+    color: black;
 }

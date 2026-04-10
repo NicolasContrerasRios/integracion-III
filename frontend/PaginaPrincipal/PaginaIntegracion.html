@@ -285,12 +285,18 @@
             <div class="modificar-container">
 
                 <div id="lista-vehiculos" class="lista-vehiculos">
-                    <!-- backend llenará esto -->
                 </div>
 
                 <div class="form-modificar">
-                    <input id="modificar-conductor-modificar" placeholder="Conductor">
-                    <input id="modificar-estado-modificar" placeholder="Estado">
+                    <select id="modificar-conductor-modificar">
+                        <option value="">Conductor</option>
+                    </select>
+                    <select id="modificar-estado-modificar">
+                        <option value="">Estado</option>
+                        <option value="Disponible">Disponible</option>
+                        <option value="En transito">En tránsito</option>
+                        <option value="Fuera de servicio">Fuera de servicio</option>
+                    </select>
 
                     <button id="boton-guardar-cambios" class="btn-guardar">Guardar</button>
                 </div>
