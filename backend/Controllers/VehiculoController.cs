@@ -65,7 +65,7 @@ namespace backend.Controllers
             _repo.Agregar(vehiculo);
 
             var conductores = _conductorRepo.ObtenerTodos();
-            var conductor = conductores.FirstOrDefault(c => c.Nombre == request.NombreConductor);
+            var conductor = conductores.FirstOrDefault(c => c.Rut == request.RutConductor);
             if (conductor == null)
             {
                 return BadRequest("Conductor no encontrado");
@@ -122,7 +122,7 @@ namespace backend.Controllers
         {
             public string Patente { get; set; }
             public string NombreVehiculo { get; set; }
-            public string NombreConductor { get; set; }
+            public string RutConductor { get; set; }
         }
 
         private IEnumerable<object> GetVehiculosConConductores(List<Vehiculo> vehiculos, List<Turno> turnos, List<Conductor> conductores, List<RegistroEntrada> registrosEntrada, List<RegistroSalida> registrosSalida)
