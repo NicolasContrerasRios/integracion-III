@@ -199,8 +199,10 @@ function agregarVehiculo() {
     const nuevoVehiculo = {
         patente: patente,
         nombre: nombre,
-        rutConductor: rutConductor
+        rut: rutConductor
     };
+
+    console.log("ENVIANDO:", nuevoVehiculo);
 
     fetch("http://localhost:5087/api/vehiculo/agregar", {
         method: "POST",
