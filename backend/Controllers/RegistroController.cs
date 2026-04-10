@@ -11,19 +11,17 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class RegistroController : ControllerBase
     {
-        private readonly IOrdenRepository _repo;
+        private readonly IOrdenRepository _ordenRepo;
         private readonly IRegistroEntradaRepository _registroEntradaRepo;
         private readonly IRegistroSalidaRepository _registroSalidaRepo;
-        private readonly IVehiculoRepository _vehiculoRepo;
         private readonly ITurnoRepository _turnoRepo;
         private readonly IConductorRepository _conductorRepo;
 
-        public RegistroController(IOrdenRepository repo, IRegistroEntradaRepository registroEntradaRepo, IRegistroSalidaRepository registroSalidaRepo, IVehiculoRepository vehiculoRepo, ITurnoRepository turnoRepo, IConductorRepository conductorRepo)
+        public RegistroController(IOrdenRepository ordenRepo, IRegistroEntradaRepository registroEntradaRepo, IRegistroSalidaRepository registroSalidaRepo, ITurnoRepository turnoRepo, IConductorRepository conductorRepo)
         {
-            _repo = repo;
+            _ordenRepo = ordenRepo;
             _registroEntradaRepo = registroEntradaRepo;
             _registroSalidaRepo = registroSalidaRepo;
-            _vehiculoRepo = vehiculoRepo;
             _turnoRepo = turnoRepo;
             _conductorRepo = conductorRepo;
         }
@@ -44,7 +42,7 @@ namespace backend.Controllers
         [HttpGet("atrasos")]
         public IActionResult GetAtrasos()
         {
-            var ordenes = _repo.ObtenerTodos();
+            var ordenes = _ordenRepo.ObtenerTodos();
             var registrosEntrada = _registroEntradaRepo.ObtenerTodos();
             var registrosSalida = _registroSalidaRepo.ObtenerTodos();
             var turnos = _turnoRepo.ObtenerTodos();
@@ -57,7 +55,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] DispositivoIOT dispositivo)
+        public IActionResult PostIOT([FromBody] DispositivoIOT dispositivo)
         {
             if (dispositivo == null)
             {
@@ -65,7 +63,7 @@ namespace backend.Controllers
             }
 
             var tipo = dispositivo.ObtenerTipoRegistro();
-            var ordenes = _repo.ObtenerTodos();
+            var ordenes = _ordenRepo.ObtenerTodos();
 
             if (tipo == "entrada")
             {
@@ -79,7 +77,7 @@ namespace backend.Controllers
                 var entradaGuardada = _registroEntradaRepo.Agregar(entrada);
                 var salidas = _registroSalidaRepo.ObtenerTodos();
 
-                if (ObtenerSalidaAnteriorSinOrden(dispositivo.Patente, salidas, ordenes, out var salidaNoRegistrada))
+                if (ObtenerSalidaAnteriorSinOrden(dispositivo.Patente, salidas, ordenes, out var salidaNoRegistrada) && salidaNoRegistrada != null)
                 {
                     var orden = new Orden
                     {
@@ -88,7 +86,7 @@ namespace backend.Controllers
                         Horas_Totales = Orden.CalcularDiferenciaHoras(salidaNoRegistrada.Hora, entradaGuardada.Hora)
                     };
 
-                    var ordenGuardada = _repo.Agregar(orden);
+                    var ordenGuardada = _ordenRepo.Agregar(orden);
                     return Ok(new
                     {
                         mensaje = "Entrada registrada y orden creada.",
@@ -125,7 +123,7 @@ namespace backend.Controllers
             return BadRequest(new { mensaje = "Tipo de registro inválido. Use 'entrada' o 'salida'." });
         }
 
-        private bool ObtenerSalidaAnteriorSinOrden(string patente, List<RegistroSalida> salidas, List<Orden> ordenes, out RegistroSalida salidaNoRegistrada)
+        private bool ObtenerSalidaAnteriorSinOrden(string patente, List<RegistroSalida> salidas, List<Orden> ordenes, out RegistroSalida? salidaNoRegistrada)
         {
             var salidasEnOrden = ordenes.Select(o => o.Id_Salida).ToHashSet();
             salidaNoRegistrada = salidas
@@ -186,7 +184,7 @@ namespace backend.Controllers
                 var entrada = registrosEntrada.FirstOrDefault(e => e.Id_Entrada == o.Id_Entrada);
                 var salida = registrosSalida.FirstOrDefault(s => s.Id_Salida == o.Id_Salida);
                 var patente = entrada?.Patente ?? salida?.Patente;
-                var conductor = new Vehiculo { Patente = patente }.GetConductorNombre(turnos, conductores);
+                var conductor = !string.IsNullOrEmpty(patente) ? new Vehiculo { Patente = patente }.GetConductorNombre(turnos, conductores) : null;
 
                 return new
                 {

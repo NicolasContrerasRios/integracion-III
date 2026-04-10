@@ -10,7 +10,7 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class VehiculoController : ControllerBase
     {
-        private readonly IVehiculoRepository _repo;
+        private readonly IVehiculoRepository _vehiculoRepo;
         private readonly ITurnoRepository _turnoRepo;
         private readonly IConductorRepository _conductorRepo;
         private readonly IRegistroEntradaRepository _registroEntradaRepo;
@@ -18,7 +18,7 @@ namespace backend.Controllers
 
         public VehiculoController(IVehiculoRepository repo, ITurnoRepository turnoRepo, IConductorRepository conductorRepo, IRegistroEntradaRepository registroEntradaRepo, IRegistroSalidaRepository registroSalidaRepo)
         {
-            _repo = repo;
+            _vehiculoRepo = repo;
             _turnoRepo = turnoRepo;
             _conductorRepo = conductorRepo;
             _registroEntradaRepo = registroEntradaRepo;
@@ -29,7 +29,7 @@ namespace backend.Controllers
         public IActionResult Get()
         {
             /*return Ok(_repo.ObtenerTodos());*/
-            var vehiculos = _repo.ObtenerTodos();
+            var vehiculos = _vehiculoRepo.ObtenerTodos();
             var turnos = _turnoRepo.ObtenerTodos();
             var conductores = _conductorRepo.ObtenerTodos();
             var registrosEntrada = _registroEntradaRepo.ObtenerTodos();
@@ -62,7 +62,7 @@ namespace backend.Controllers
                 Nombre = request.NombreVehiculo,
                 Estado = "Disponible"
             };
-            _repo.Agregar(vehiculo);
+            _vehiculoRepo.Agregar(vehiculo);
 
             var conductores = _conductorRepo.ObtenerTodos();
             var conductor = conductores.FirstOrDefault(c => c.Rut == request.RutConductor);
@@ -84,7 +84,7 @@ namespace backend.Controllers
         [HttpPost("modificar")]
         public IActionResult Modificar([FromBody] VehiculoModificarRequest request)
         {
-            var vehiculos = _repo.ObtenerTodos();
+            var vehiculos = _vehiculoRepo.ObtenerTodos();
             var vehiculo = vehiculos.FirstOrDefault(v => v.Patente == request.Patente);
             if (vehiculo == null)
             {
@@ -92,7 +92,7 @@ namespace backend.Controllers
             }
 
             vehiculo.Estado = request.Estado;
-            _repo.Modificar(vehiculo);
+            _vehiculoRepo.Modificar(vehiculo);
 
             var conductores = _conductorRepo.ObtenerTodos();
             var conductor = conductores.FirstOrDefault(c => c.Nombre == request.Conductor);
