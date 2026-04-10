@@ -724,3 +724,29 @@ body.dark-mode footer {
     color: red;
     font-weight: bold;
 }
+
+/* COMBOBOX ESTILO */
+.form-grid select {
+    padding: 8px;
+    border-radius: 15px;
+    border: 2px solid #ff8533;
+    font-size: 13px;
+    font-family: 'Red Hat Mono', monospace;
+    background: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.form-grid select:hover {
+    border-color: #ff6600;
+}
+.form-grid select:focus {
+    outline: none;
+    border-color: #ff6600;
+    box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
+}
+
+body.dark-mode .form-grid select {
+    background: #1e1e1e;
+    color: white;
+    border-color: #ff8533;
+}
