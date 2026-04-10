@@ -98,6 +98,16 @@ function cargarRetrasos() {
 
                 // 🔥 CLICK EN FILA
                 fila.addEventListener("click", () => {
+
+                    // 🔹 quitar selección anterior
+                    document.querySelectorAll("#tablaRetrasosBD tr").forEach(tr => {
+                        tr.classList.remove("activo");
+                    });
+
+                    // 🔹 marcar fila actual
+                    fila.classList.add("activo");
+
+                    // 🔹 mostrar detalle
                     mostrarDetalle(r.patente, detalles);
                 });
 
@@ -122,3 +132,4 @@ function mostrarDetalle(patente, detalles) {
     const campos = document.querySelectorAll(".panel-retrasos .campo");
     campos[0].textContent = detalle.fecha;
 }
+

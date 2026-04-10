@@ -414,11 +414,18 @@ html, body {
 }
 
 .campo {
-    width: 200px;
-    height: 35px;
-    background: #ff8533;
+    background-color: #ff7f32;
     border-radius: 20px;
-    margin-bottom: 2.5vh;
+    padding: 10px 15px;
+
+    display: inline-flex;
+    align-items: center;      
+    justify-content: center;  
+
+    color: black;
+    font-weight: bold;
+
+    min-width: 120px;
 }
 
 .fila {
@@ -684,4 +691,10 @@ body.dark-mode footer {
 .salida {
     color: red;
     font-weight: bold;
+}
+
+/*SELECCION TABLAS RETRASO*/    
+#tablaRetrasosBD tr.activo {
+    background-color: #ffe0c2;
+    transition: 0.2s;
 }
