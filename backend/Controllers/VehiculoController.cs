@@ -79,7 +79,7 @@ namespace backend.Controllers
             };
             _turnoRepo.Agregar(turno);
 
-            return Ok("Enviado correctamente");
+            return Ok(vehiculo);
         }
         [HttpPost("modificar")]
         public IActionResult Modificar([FromBody] VehiculoModificarRequest request)
@@ -109,7 +109,7 @@ namespace backend.Controllers
             };
             _turnoRepo.Agregar(turno);
 
-            return Ok("Enviado correctamente");
+            return Ok(vehiculo);
         }
 
         public class VehiculoModificarRequest
