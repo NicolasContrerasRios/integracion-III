@@ -38,6 +38,21 @@ namespace backend.Controllers
             return Ok(GetVehiculosConConductores(vehiculos, turnos, conductores, registrosEntrada, registrosSalida));
         }
 
+        [HttpGet("conductores")]
+        public IActionResult GetConductores()
+        {
+            var conductores = _conductorRepo.ObtenerTodos();
+
+            var resultado = conductores.Select(c => new
+            {
+                nombre = c.Nombre,
+                rut = c.Rut
+            }).ToList();
+
+            return Ok(resultado);
+        }
+
+
         [HttpPost("agregar")]
         public IActionResult Post([FromBody] VehiculoTurnoRequest request)
         {

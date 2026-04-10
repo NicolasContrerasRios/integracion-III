@@ -18,6 +18,18 @@ builder.Services.AddScoped<IRegistroSalidaRepository, RegistroSalidaRepository>(
 builder.Services.AddScoped<IOrdenRepository, OrdenRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirTodo", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+
+
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
@@ -34,6 +46,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+app.UseCors("PermitirTodo");
 
 app.UseHttpsRedirection();
 app.MapControllers();
