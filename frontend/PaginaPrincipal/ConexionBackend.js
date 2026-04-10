@@ -3,9 +3,11 @@ console.log("JS funcionando");
 document.addEventListener("DOMContentLoaded", () => {
     cargarHistorial();
     cargarRetrasos();
+    cargarVehiculos();
     
 });
 
+//TABLAS INGRESO Y SALIDA 
 function cargarHistorial() {
     console.log("Entró a cargarHistorial");
 
@@ -71,6 +73,7 @@ function cargarHistorial() {
 }
 
 
+//TABLAS RETRASOS
 function cargarRetrasos() {
 
     fetch("http://localhost:5087/api/Registro/atrasos")
@@ -117,7 +120,6 @@ function cargarRetrasos() {
         })
         .catch(err => console.error("Error atrasos:", err));
 }
-
 function mostrarDetalle(patente, detalles) {
 
     const detalle = detalles.find(d => d.patente === patente);
@@ -133,3 +135,42 @@ function mostrarDetalle(patente, detalles) {
     campos[0].textContent = detalle.fecha;
 }
 
+
+function cargarVehiculos() {
+
+    fetch("http://localhost:5087/api/Vehiculo") 
+        .then(res => res.json())
+        .then(data => {
+
+            console.log("VEHICULOS:", data);
+
+            const tabla = document.getElementById("tabla-vehiculos-bd");
+            tabla.innerHTML = "";
+
+            data.forEach(v => {
+
+                const fila = document.createElement("tr");
+
+                // 🔥 estado con color
+                let estadoClase = "";
+                const estado = (v.estado || "").toLowerCase();
+
+                if (estado === "disponible") estadoClase = "estado-disponible";
+                else if (estado === "en transito") estadoClase = "estado-transito";
+                else estadoClase = "estado-fuera";
+
+                fila.innerHTML = `
+                    <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
+                    <td>${v.patente}</td>
+                    <td>${v.conductor?.nombre || "Sin conductor"}</td>
+                    <td class="${estadoClase}">${v.estado}</td>
+                    <td>${v.fecha || "-"}</td>
+                    <td>${v.hora || "-"}</td>
+                `;
+
+                tabla.appendChild(fila);
+            });
+
+        })
+        .catch(err => console.error("Error vehículos:", err));
+}

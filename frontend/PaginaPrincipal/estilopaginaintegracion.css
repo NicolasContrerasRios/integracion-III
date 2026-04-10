@@ -698,3 +698,19 @@ body.dark-mode footer {
     background-color: #ffe0c2;
     transition: 0.2s;
 }
+
+/*COLORES DE ESTADO TABLA DE VEHICULOS*/
+.estado-disponible {
+    color: green;
+    font-weight: bold;
+}
+
+.estado-transito {
+    color: orange;
+    font-weight: bold;
+}
+
+.estado-fuera {
+    color: red;
+    font-weight: bold;
+}
