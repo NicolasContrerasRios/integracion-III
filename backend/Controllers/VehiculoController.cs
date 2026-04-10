@@ -95,7 +95,7 @@ namespace backend.Controllers
             _vehiculoRepo.Modificar(vehiculo);
 
             var conductores = _conductorRepo.ObtenerTodos();
-            var conductor = conductores.FirstOrDefault(c => c.Nombre == request.Conductor);
+            var conductor = conductores.FirstOrDefault(c => c.Rut == request.RutConductor);
             if (conductor == null)
             {
                 return BadRequest("Conductor no encontrado");
@@ -115,7 +115,7 @@ namespace backend.Controllers
         public class VehiculoModificarRequest
         {
             public string Patente { get; set; }
-            public string Conductor { get; set; }
+            public string RutConductor { get; set; }
             public string Estado { get; set; }
         }
         public class VehiculoTurnoRequest
