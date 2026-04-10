@@ -160,7 +160,7 @@ function cargarVehiculos() {
 
                 const fila = document.createElement("tr");
 
-                // 🔥 estado con color
+                // estado con color
                 let estadoClase = "";
                 const estado = (v.estado || "").toLowerCase();
 
@@ -291,7 +291,7 @@ function cargarListaVehiculos() {
                 const item = document.createElement("p");
                 item.textContent = v.patente;
 
-                // 🔥 CLICK
+                // CLICK
                 item.addEventListener("click", () => {
                     seleccionarVehiculo(v);
                 });
@@ -309,10 +309,10 @@ function seleccionarVehiculo(v) {
 
     vehiculoSeleccionado = v;
 
-    // 🔥 estado
+    //estado
     document.getElementById("modificar-estado-modificar").value = v.estado || "";
 
-    // 🔥 conductor → buscar por nombre
+    //conductor → buscar por nombre
     const select = document.getElementById("modificar-conductor-modificar");
 
     for (let option of select.options) {
@@ -350,7 +350,7 @@ function guardarCambios() {
     console.log("ENVIANDO:", vehiculoModificado);
 
     fetch("http://localhost:5087/api/vehiculo/modificar", {
-        method: "PUT", // o POST según tu backend
+        method: "POST", 
         headers: {
             "Content-Type": "application/json"
         },
@@ -367,7 +367,7 @@ function guardarCambios() {
     .then(() => {
         alert("Vehículo actualizado");
 
-        // 🔥 refrescar TODO
+        // refrescar TODO
         cargarVehiculos();
         cargarListaVehiculos();
     })

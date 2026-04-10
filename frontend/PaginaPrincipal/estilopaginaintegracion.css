@@ -762,7 +762,6 @@ body.dark-mode .form-grid select {
     outline: none;
     cursor: pointer;
     transition: 0.2s;
-    appearance: none;
 }
 
 .form-modificar select:hover {
