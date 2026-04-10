@@ -343,7 +343,7 @@ function guardarCambios() {
 
     const vehiculoModificado = {
         patente: vehiculoSeleccionado.patente,
-        rut: rutConductor,
+        RutConductor: rutConductor,
         estado: estado
     };
 
