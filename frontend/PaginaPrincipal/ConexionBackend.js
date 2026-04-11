@@ -1,22 +1,43 @@
-console.log("JS funcionando");
-
 document.addEventListener("DOMContentLoaded", () => {
-    cargarHistorial();
-    cargarRetrasos();
-    cargarVehiculos();
-    cargarConductores();
-    cargarListaVehiculos();
-    cargarDatosGrafico(); 
-    setInterval(cargarDatosGrafico, 5000);
 
+    // Se ejecuta solo si se esta en la pagina principal
+    if (document.getElementById("tabla-ingreso")) {
+        cargarHistorial();
+        cargarRetrasos();
+        cargarVehiculos();
+        cargarConductores();
+        cargarListaVehiculos();
+        cargarDatosGrafico();
+        setInterval(cargarDatosGrafico, 5000);
+    }
+
+    // BOTONES ADMIN
     document.getElementById("boton-guardar-vehiculo")
-    .addEventListener("click", agregarVehiculo);
+        ?.addEventListener("click", agregarVehiculo);
 
     document.getElementById("boton-guardar-cambios")
-    .addEventListener("click", guardarCambios);
-    
-});
+        ?.addEventListener("click", guardarCambios);
 
+    // LOGIN 
+    const btnLogin = document.getElementById("btnlogin");
+    if (btnLogin) {
+        btnLogin.addEventListener("click", iniciarSesion);
+    }
+
+    // LOGOUT 
+    const btnLogout = document.getElementById("btnLogout");
+    if (btnLogout) {
+        btnLogout.addEventListener("click", () => {
+
+            const confirmar = confirm("¿Quieres cerrar sesión?");
+            if (!confirmar) return;
+
+            localStorage.removeItem("usuario");
+            window.location.href = "iniciosesionweb.html";
+        });
+    }
+
+});
 //TABLAS INGRESO Y SALIDA 
 function cargarHistorial() {
     console.log("Entró a cargarHistorial");
@@ -377,3 +398,5 @@ function guardarCambios() {
         alert("Error al actualizar");
     });
 }
+
+

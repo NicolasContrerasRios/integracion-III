@@ -18,6 +18,7 @@ const grafico = new Chart(ctx, {
     },
 options: {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
         legend: {
             display: false
