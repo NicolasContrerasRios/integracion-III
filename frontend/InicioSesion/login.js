@@ -18,28 +18,29 @@ function iniciarSesion() {
         return;
     }
 
-    fetch("http://localhost:5087/api/login") 
-        .then(res => res.json())
-        .then(data => {
-
-            const encontrado = data.find(u => 
-                u.nombreUsuario === usuario && u.clave === clave
-            );
-
-            if (encontrado) {
-                alert("Login correcto");
-
-                // REDIRECCIÓN
-                window.location.href = "PaginaIntegracion.html";
-            } else {
-                alert("Usuario o clave incorrectos");
-            }
+    fetch("http://localhost:5087/api/autentification/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nombreUsuario: usuario,
+            clave: clave
         })
-        .catch(err => {
-            console.error("Error login:", err);
-            alert("Error al conectar con el servidor");
-        });
-
-        
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Error en login");
+        return res.json();
+    })
+    .then(data => {
+        alert("Login correcto");
+        localStorage.setItem("usuario", usuario);
+        window.location.href = "PaginaIntegracion.html";
+    })
+    .catch(err => {
+        console.error("Error login:", err);
+        alert("Usuario o clave incorrectos");
+    });
+            
 }
 
