@@ -48,74 +48,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
-//TABLAS INGRESO Y SALIDA 
-function cargarHistorial() {
-    console.log("Entró a cargarHistorial");
+    //TABLAS INGRESO Y SALIDA 
+    function cargarHistorial() {
+        console.log("Entró a cargarHistorial");
 
-    fetch("http://localhost:5087/api/Registro/historial")
-        .then(response => response.json())
-        .then(data => {
-            console.log("DATA:", data);
+        fetch("http://localhost:5087/api/Registro/historial")
+            .then(response => response.json())
+    .then(data => {
 
-            const tabla = document.getElementById("tabla-ingreso");
-            tabla.innerHTML = "";
+        let todos = [];
 
-            let todos = [];
+        let entradas = data.entradas || [];
+        let salidas = data.salidas || [];
 
-            // ✅ IMPORTANTE
-            let entradas = data.entradas || data.Entradas || [];
-            let salidas = data.salidas || data.Salidas || [];
-
-            // 🔹 ENTRADAS
-            entradas.forEach(e => {
-                todos.push({
-                    patente: e.patente || e.Patente,
-                    conductor: e.conductor || e.Conductor,
-                    fecha: e.fecha || e.Fecha,
-                    hora: e.hora || e.Hora,
-                    tipo: "Entrada"
-                });
+        entradas.forEach(e => {
+            todos.push({
+                patente: e.patente,
+                conductor: e.conductor,
+                fecha: e.fecha,
+                hora: e.hora,
+                tipo: "Entrada"
             });
-
-            // 🔹 SALIDAS
-            salidas.forEach(s => {
-                todos.push({
-                    patente: s.patente || s.Patente,
-                    conductor: s.conductor || s.Conductor,
-                    fecha: s.fecha || s.Fecha,
-                    hora: s.hora || s.Hora,
-                    tipo: "Salida"
-                });
-            });
-
-            // 🔥 ORDENAR POR FECHA Y HORA
-            todos.sort((a, b) => {
-                return new Date(b.fecha + " " + b.hora) - new Date(a.fecha + " " + a.hora);
-            });
-
-            // 🔹 PINTAR TABLA
-            todos.forEach(r => {
-                tabla.innerHTML += `
-                    <tr>
-                        <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
-                        <td>${r.patente}</td>
-                        <td>${r.conductor}</td>
-                        <td>${r.fecha}</td>
-                        <td>${r.tipo}</td>
-                        <td>${r.hora}</td>
-                    </tr>
-                `;
-            });
-
-        })
-        .catch(error => {
-            console.error("Error al cargar datos:", error);
         });
 
-        window.historialGlobal = todos || [];
+        salidas.forEach(s => {
+            todos.push({
+                patente: s.patente,
+                conductor: s.conductor,
+                fecha: s.fecha,
+                hora: s.hora,
+                tipo: "Salida"
+            });
+        });
+
+        window.historialGlobal = todos;
         paginaIngreso = 1;
         actualizarHistorial();
-}
+    })
+    }
 
 function actualizarHistorial() {
 
