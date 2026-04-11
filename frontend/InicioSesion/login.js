@@ -1,11 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    document.getElementById("btnlogin")
-        .addEventListener("click", iniciarSesion);
+    const btnLogin = document.getElementById("btnlogin");
+
+    if (btnLogin) {
+        btnLogin.addEventListener("click", iniciarSesion);
+    }
 
 });
-
-// LOGIN
 
 function iniciarSesion() {
 
@@ -28,19 +29,29 @@ function iniciarSesion() {
             clave: clave
         })
     })
-    .then(res => {
-        if (!res.ok) throw new Error("Error en login");
+    .then(async res => {
+
+        // si el backend falla
+        if (!res.ok) {
+            const errorText = await res.text();
+            throw new Error(errorText || "Error en login");
+        }
+
         return res.json();
     })
     .then(data => {
+
         alert("Login correcto");
+
+        // guardamos sesión simple
         localStorage.setItem("usuario", usuario);
+
+        // redirección
         window.location.href = "PaginaIntegracion.html";
     })
     .catch(err => {
         console.error("Error login:", err);
         alert("Usuario o clave incorrectos");
     });
-            
-}
 
+}
