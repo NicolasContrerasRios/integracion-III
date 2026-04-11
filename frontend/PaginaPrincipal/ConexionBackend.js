@@ -117,7 +117,6 @@ function actualizarHistorial() {
     document.getElementById("paginaIngreso").textContent = paginaIngreso;
 }
 
-//TABLAS RETRASOS
 function cargarRetrasos() {
 
     fetch("http://localhost:5087/api/Registro/atrasos")
@@ -143,31 +142,29 @@ function cargarRetrasos() {
                     <td>${r.horas_Tardadas}</td>
                 `;
 
-                // 🔥 CLICK EN FILA
                 fila.addEventListener("click", () => {
 
-                    // 🔹 quitar selección anterior
                     document.querySelectorAll("#tablaRetrasosBD tr").forEach(tr => {
                         tr.classList.remove("activo");
                     });
 
-                    // 🔹 marcar fila actual
                     fila.classList.add("activo");
 
-                    // 🔹 mostrar detalle
                     mostrarDetalle(r.patente, detalles);
                 });
 
                 tabla.appendChild(fila);
             });
 
+            // 🔥 ESTO VA AQUÍ DENTRO
+            window.retrasosGlobal = registros;
+            paginaRetrasos = 1;
+            actualizarRetrasos();
+
         })
         .catch(err => console.error("Error atrasos:", err));
-
-        window.retrasosGlobal = registros || [];
-        paginaRetrasos = 1;
-        actualizarRetrasos();
 }
+
 function mostrarDetalle(patente, detalles) {
 
     const detalle = detalles.find(d => d.patente === patente);
@@ -214,7 +211,6 @@ function actualizarRetrasos() {
     document.getElementById("paginaRetrasos").textContent = paginaRetrasos;
 }
 
-//TABLA VEHICULOS
 function cargarVehiculos() {
 
     fetch("http://localhost:5087/api/Vehiculo") 
@@ -230,7 +226,6 @@ function cargarVehiculos() {
 
                 const fila = document.createElement("tr");
 
-                // estado con color
                 let estadoClase = "";
                 const estado = (v.estado || "").toLowerCase();
 
@@ -250,14 +245,14 @@ function cargarVehiculos() {
                 tabla.appendChild(fila);
             });
 
+            // 🔥 ESTO VA DENTRO DEL .then
+            window.vehiculosGlobal = data;
+            paginaVehiculos = 1;
+            actualizarVehiculos();
+
         })
         .catch(err => console.error("Error vehículos:", err));
-
-        window.vehiculosGlobal = data || [];
-        paginaVehiculos = 1;
-        actualizarVehiculos();
 }
-
 function actualizarVehiculos() {
 
     if (paginaVehiculos < 1) paginaVehiculos = 1;
