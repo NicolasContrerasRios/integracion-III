@@ -23,9 +23,11 @@ namespace backend.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-           
+            var usuarios = _usuarioRepo.ObtenerTodos()
+                .Select(u => new { u.NombreUsuario, u.Clave })
+                .ToList();
 
-            return Ok();
+            return Ok(usuarios);
         }
 
         [HttpPost]
