@@ -125,42 +125,18 @@ function cargarRetrasos() {
 
             console.log("ATRASOS:", data);
 
-            const tabla = document.getElementById("tablaRetrasosBD");
-            tabla.innerHTML = "";
-
             let registros = data.registro || data.Registro || [];
             let detalles = data.detalles || data.Detalles || [];
 
-            registros.forEach(r => {
-
-                const fila = document.createElement("tr");
-
-                fila.innerHTML = `
-                    <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
-                    <td>${r.patente}</td>
-                    <td>${r.fecha}</td>
-                    <td>${r.horas_Tardadas}</td>
-                `;
-
-                fila.addEventListener("click", () => {
-
-                    document.querySelectorAll("#tablaRetrasosBD tr").forEach(tr => {
-                        tr.classList.remove("activo");
-                    });
-
-                    fila.classList.add("activo");
-
-                    mostrarDetalle(r.patente, detalles);
-                });
-
-                tabla.appendChild(fila);
-            });
-
-            // 🔥 ESTO VA AQUÍ DENTRO
+            // guardar global
             window.retrasosGlobal = registros;
-            paginaRetrasos = 1;
-            actualizarRetrasos();
+            window.detallesGlobal = detalles;
 
+            // reiniciar página
+            paginaRetrasos = 1;
+
+            // render
+            actualizarRetrasos();
         })
         .catch(err => console.error("Error atrasos:", err));
 }
@@ -175,7 +151,6 @@ function mostrarDetalle(patente, detalles) {
     document.getElementById("detalle-horario").textContent = detalle.hora_Salida;
     document.getElementById("detalle-conductor").textContent = detalle.conductor;
 
-    // fecha (el primero que no tenía id)
     const campos = document.querySelectorAll(".panel-retrasos .campo");
     campos[0].textContent = detalle.fecha;
 }
@@ -188,6 +163,7 @@ function actualizarRetrasos() {
     tabla.innerHTML = "";
 
     const datos = window.retrasosGlobal || [];
+    const detalles = window.detallesGlobal || [];
 
     const inicio = (paginaRetrasos - 1) * filasRetrasos;
     const fin = inicio + filasRetrasos;
@@ -204,6 +180,16 @@ function actualizarRetrasos() {
             <td>${r.fecha}</td>
             <td>${r.horas_Tardadas}</td>
         `;
+
+        fila.addEventListener("click", () => {
+
+            document.querySelectorAll("#tablaRetrasosBD tr")
+                .forEach(tr => tr.classList.remove("activo"));
+
+            fila.classList.add("activo");
+
+            mostrarDetalle(r.patente, detalles);
+        });
 
         tabla.appendChild(fila);
     });
@@ -245,7 +231,6 @@ function cargarVehiculos() {
                 tabla.appendChild(fila);
             });
 
-            // 🔥 ESTO VA DENTRO DEL .then
             window.vehiculosGlobal = data;
             paginaVehiculos = 1;
             actualizarVehiculos();
