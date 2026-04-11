@@ -1,3 +1,13 @@
+
+let paginaVehiculos = 1;
+let paginaIngreso = 1;
+let paginaRetrasos = 1;
+
+const filasVehiculos = 10;
+const filasIngreso = 10;
+const filasRetrasos = 5;
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
     // Se ejecuta solo si se esta en la pagina principal
@@ -101,8 +111,41 @@ function cargarHistorial() {
         .catch(error => {
             console.error("Error al cargar datos:", error);
         });
+
+        window.historialGlobal = todos || [];
+        paginaIngreso = 1;
+        actualizarHistorial();
 }
 
+function actualizarHistorial() {
+
+    if (paginaIngreso < 1) paginaIngreso = 1;
+
+    const tabla = document.getElementById("tabla-ingreso");
+    tabla.innerHTML = "";
+
+    const datos = window.historialGlobal || [];
+
+    const inicio = (paginaIngreso - 1) * filasIngreso;
+    const fin = inicio + filasIngreso;
+
+    const pagina = datos.slice(inicio, fin);
+
+    pagina.forEach(r => {
+        tabla.innerHTML += `
+            <tr>
+                <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
+                <td>${r.patente}</td>
+                <td>${r.conductor}</td>
+                <td>${r.fecha}</td>
+                <td>${r.tipo}</td>
+                <td>${r.hora}</td>
+            </tr>
+        `;
+    });
+
+    document.getElementById("paginaIngreso").textContent = paginaIngreso;
+}
 
 //TABLAS RETRASOS
 function cargarRetrasos() {
@@ -150,6 +193,10 @@ function cargarRetrasos() {
 
         })
         .catch(err => console.error("Error atrasos:", err));
+
+        window.retrasosGlobal = registros || [];
+        paginaRetrasos = 1;
+        actualizarRetrasos();
 }
 function mostrarDetalle(patente, detalles) {
 
@@ -164,6 +211,37 @@ function mostrarDetalle(patente, detalles) {
     // fecha (el primero que no tenía id)
     const campos = document.querySelectorAll(".panel-retrasos .campo");
     campos[0].textContent = detalle.fecha;
+}
+
+function actualizarRetrasos() {
+
+    if (paginaRetrasos < 1) paginaRetrasos = 1;
+
+    const tabla = document.getElementById("tablaRetrasosBD");
+    tabla.innerHTML = "";
+
+    const datos = window.retrasosGlobal || [];
+
+    const inicio = (paginaRetrasos - 1) * filasRetrasos;
+    const fin = inicio + filasRetrasos;
+
+    const pagina = datos.slice(inicio, fin);
+
+    pagina.forEach(r => {
+
+        const fila = document.createElement("tr");
+
+        fila.innerHTML = `
+            <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
+            <td>${r.patente}</td>
+            <td>${r.fecha}</td>
+            <td>${r.horas_Tardadas}</td>
+        `;
+
+        tabla.appendChild(fila);
+    });
+
+    document.getElementById("paginaRetrasos").textContent = paginaRetrasos;
 }
 
 //TABLA VEHICULOS
@@ -204,8 +282,49 @@ function cargarVehiculos() {
 
         })
         .catch(err => console.error("Error vehículos:", err));
+
+        window.vehiculosGlobal = data || [];
+        paginaVehiculos = 1;
+        actualizarVehiculos();
 }
 
+function actualizarVehiculos() {
+
+    if (paginaVehiculos < 1) paginaVehiculos = 1;
+
+    const tabla = document.getElementById("tabla-vehiculos-bd");
+    tabla.innerHTML = "";
+
+    const datos = window.vehiculosGlobal || [];
+
+    const inicio = (paginaVehiculos - 1) * filasVehiculos;
+    const fin = inicio + filasVehiculos;
+
+    const pagina = datos.slice(inicio, fin);
+
+    pagina.forEach(v => {
+
+        let estadoClase = "";
+        const estado = (v.estado || "").toLowerCase();
+
+        if (estado === "disponible") estadoClase = "estado-disponible";
+        else if (estado === "en transito") estadoClase = "estado-transito";
+        else estadoClase = "estado-fuera";
+
+        tabla.innerHTML += `
+            <tr>
+                <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
+                <td>${v.patente}</td>
+                <td>${v.conductor?.nombre || "Sin conductor"}</td>
+                <td class="${estadoClase}">${v.estado}</td>
+                <td>${v.fecha || "-"}</td>
+                <td>${v.hora || "-"}</td>
+            </tr>
+        `;
+    });
+
+    document.getElementById("paginaVehiculos").textContent = paginaVehiculos;
+}
 //ADMINISTRADOR
 function agregarVehiculo() {
 
@@ -400,3 +519,56 @@ function guardarCambios() {
 }
 
 
+// =======================
+// PAGINACIÓN VEHÍCULOS
+// =======================
+function siguienteVehiculos() {
+    const total = window.vehiculosGlobal?.length || 0;
+    if (paginaVehiculos * filasVehiculos < total) {
+        paginaVehiculos++;
+        actualizarVehiculos();
+    }
+}
+
+function anteriorVehiculos() {
+    if (paginaVehiculos > 1) {
+        paginaVehiculos--;
+        actualizarVehiculos();
+    }
+}
+
+// =======================
+// PAGINACIÓN INGRESO
+// =======================
+function siguienteIngreso() {
+    const total = window.historialGlobal?.length || 0;
+    if (paginaIngreso * filasIngreso < total) {
+        paginaIngreso++;
+        actualizarHistorial();
+    }
+}
+
+function anteriorIngreso() {
+    if (paginaIngreso > 1) {
+        paginaIngreso--;
+        actualizarHistorial();
+    }
+}
+
+// =======================
+// PAGINACIÓN RETRASOS
+// =======================
+function siguienteRetrasos() {
+    const total = window.retrasosGlobal?.length || 0;
+    if (paginaRetrasos * filasRetrasos < total) {
+        paginaRetrasos++;
+        actualizarRetrasos();
+    }
+}
+
+function anteriorRetrasos() {
+    if (paginaRetrasos > 1) {
+        paginaRetrasos--;
+        actualizarRetrasos();
+    }
+}
