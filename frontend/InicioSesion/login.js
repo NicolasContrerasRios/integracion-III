@@ -13,7 +13,6 @@ function iniciarSesion() {
     const usuario = document.getElementById("usuario").value.trim();
     const clave = document.getElementById("clave").value.trim();
 
-    // VALIDACIÓN
     if (!usuario || !clave) {
         alert("Completa todos los campos");
         return;
@@ -31,27 +30,23 @@ function iniciarSesion() {
     })
     .then(async res => {
 
-        // si el backend falla
         if (!res.ok) {
-            const errorText = await res.text();
-            throw new Error(errorText || "Error en login");
+            throw new Error("Usuario o clave incorrectos");
         }
 
-        return res.json();
+        return res.text(); // tu backend devuelve string "Login correcto"
     })
-    .then(data => {
+    .then(() => {
 
         alert("Login correcto");
 
-        // guardamos sesión simple
         localStorage.setItem("usuario", usuario);
 
-        // redirección
         window.location.href = "PaginaIntegracion.html";
     })
     .catch(err => {
         console.error("Error login:", err);
-        alert("Usuario o clave incorrectos");
+        alert(err.message);
     });
 
 }
