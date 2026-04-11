@@ -105,6 +105,11 @@ namespace backend.Controllers
 
             if (tipo == "salida")
             {
+                if (!VerificarRangoHora(dispositivo.Hora))
+                {
+                    return BadRequest(new { mensaje = "La hora de salida está fuera del rango permitido (08:00 - 18:00)." });
+                }
+
                 var salida = new RegistroSalida
                 {
                     Patente = dispositivo.Patente,
@@ -201,6 +206,13 @@ namespace backend.Controllers
                 Registro = registro,
                 Detalles = detalles
             };
+        }
+
+        private bool VerificarRangoHora(TimeOnly hora)
+        {
+            var inicio = TimeOnly.Parse("08:00");
+            var fin = TimeOnly.Parse("18:00");
+            return hora >= inicio && hora <= fin;
         }
     }
 
