@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!confirmar) return;
 
             localStorage.removeItem("usuario");
-            window.location.href = "iniciosesionweb.html";
+            window.location.replace("iniciosesionweb.html");
         });
     }
 
