@@ -156,13 +156,15 @@ html, body {
 }
 
 .contenedor-graficos {
-    width: 60%;
+    width: 600px;   
+    height: 400px;  
     margin: 3vh auto;
     background: white;
-    padding: 2vh 2vw;
-    border-radius: 1vw;
+    padding: 20px;
+    border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     position: relative;
+    max-width: 90%;
 }
 
 .top-grafico {
@@ -216,6 +218,11 @@ html, body {
     font-size: 32px;
     font-weight: bold;
     margin-top: 0.8vh;
+}
+
+#miGrafico {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 /* ========================

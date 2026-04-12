@@ -35,7 +35,7 @@ options: {
             beginAtZero: true,
             title: {
                 display: true,
-                text: 'PAQUETES'
+                text: 'ORDENES'
             }
         }
     }

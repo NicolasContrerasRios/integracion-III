@@ -47,6 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
             actualizarHistorial();
     });
 
+});
+
 // LOGOUT 
 const btnLogout = document.getElementById("btnLogout");
 
@@ -120,7 +122,7 @@ function actualizarHistorial() {
 
         const coincidePatente = r.patente.toLowerCase().includes(patenteFiltro);
 
-        const coincideFecha = !fechaFiltro || r.fecha === fechaFiltro;
+        const coincideFecha = !fechaFiltro || r.fecha.includes(fechaFiltro);
 
         return coincidePatente && coincideFecha;
     });
@@ -593,5 +595,3 @@ function guardarCambiosReal() {
     });
 }
 
-
-});
