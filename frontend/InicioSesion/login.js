@@ -14,7 +14,7 @@ function iniciarSesion() {
     const clave = document.getElementById("clave").value.trim();
 
     if (!usuario || !clave) {
-        alert("Completa todos los campos");
+        mostrarMensaje("Error", "Completa todos los campos");
         return;
     }
 
@@ -38,7 +38,7 @@ function iniciarSesion() {
     })
     .then(() => {
 
-        alert("Login correcto");
+        mostrarMensaje("Éxito", "Login correcto");
 
         localStorage.setItem("usuario", usuario);
 
@@ -46,7 +46,7 @@ function iniciarSesion() {
     })
     .catch(err => {
         console.error("Error login:", err);
-        alert(err.message);
+        mostrarMensaje("Error", err.message);
     });
 
 }

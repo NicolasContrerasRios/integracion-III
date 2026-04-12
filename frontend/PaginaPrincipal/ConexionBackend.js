@@ -34,20 +34,35 @@ document.addEventListener("DOMContentLoaded", () => {
         btnLogin.addEventListener("click", iniciarSesion);
     }
 
-    // LOGOUT 
-    const btnLogout = document.getElementById("btnLogout");
-    if (btnLogout) {
-        btnLogout.addEventListener("click", () => {
+    //FILTROS
+    document.getElementById("filtroPatente")
+        ?.addEventListener("input", () => {
+            paginaIngreso = 1;
+            actualizarHistorial();
+        });
 
-            const confirmar = confirm("¿Quieres cerrar sesión?");
-            if (!confirmar) return;
+    document.getElementById("filtroFecha")
+        ?.addEventListener("change", () => {
+            paginaIngreso = 1;
+            actualizarHistorial();
+    });
+
+// LOGOUT 
+const btnLogout = document.getElementById("btnLogout");
+
+if (btnLogout) {
+    btnLogout.addEventListener("click", () => {
+
+        mostrarConfirmacion("Cerrar sesión", "¿Quieres cerrar sesión?", (ok) => {
+            if (!ok) return;
 
             localStorage.removeItem("usuario");
             window.location.replace("iniciosesionweb.html");
         });
-    }
 
-});
+    });
+}
+
     //TABLAS INGRESO Y SALIDA 
     function cargarHistorial() {
         console.log("Entró a cargarHistorial");
@@ -94,10 +109,24 @@ function actualizarHistorial() {
     const tabla = document.getElementById("tabla-ingreso");
     tabla.innerHTML = "";
 
-    const datos = window.historialGlobal || [];
+    let datos = window.historialGlobal || [];
 
-    const inicio = (paginaIngreso - 1) * filasIngreso;
-    const fin = inicio + filasIngreso;
+    // filtros
+    const patenteFiltro = document.getElementById("filtroPatente")?.value.toLowerCase() || "";
+    const fechaFiltro = document.getElementById("filtroFecha")?.value || "";
+
+    // aplicar filtros
+    datos = datos.filter(r => {
+
+        const coincidePatente = r.patente.toLowerCase().includes(patenteFiltro);
+
+        const coincideFecha = !fechaFiltro || r.fecha === fechaFiltro;
+
+        return coincidePatente && coincideFecha;
+    });
+
+        const inicio = (paginaIngreso - 1) * filasIngreso;
+        const fin = inicio + filasIngreso;
 
     const pagina = datos.slice(inicio, fin);
 
@@ -275,61 +304,22 @@ function actualizarVehiculos() {
 
     document.getElementById("paginaVehiculos").textContent = paginaVehiculos;
 }
-//ADMINISTRADOR
+
 function agregarVehiculo() {
 
     const patente = document.getElementById("ingresar-patente").value.trim();
     const nombre = document.getElementById("ingresar-nombre-camion").value.trim();
     const rutConductor = document.getElementById("ingresar-conductor").value;
 
-    // VALIDACIÓN
     if (!patente || !nombre || !rutConductor) {
-        alert("Completa todos los campos");
+        mostrarMensaje("Error", "Completa todos los campos");
         return;
     }
 
-    // CONFIRMACIÓN
-    const confirmar = confirm("¿Seguro que quieres agregar este vehículo?");
-    if (!confirmar) return;
+    mostrarConfirmacion("Agregar vehículo", "¿Seguro que quieres agregar este vehículo?", (ok) => {
+        if (!ok) return;
 
-    const nuevoVehiculo = {
-        patente: patente,
-        NombreVehiculo: nombre,
-        RutConductor: rutConductor
-    };
-
-    console.log("ENVIANDO:", nuevoVehiculo);
-
-    fetch("http://localhost:5087/api/vehiculo/agregar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(nuevoVehiculo)
-    })
-    .then(async res => {
-        const texto = await res.text(); 
-        console.log("RESPUESTA BACKEND:", texto);
-
-        if (!res.ok) {
-            throw new Error(texto);
-        }
-
-        return JSON.parse(texto);
-    })
-    .then(data => {
-        console.log("Vehículo guardado:", data);
-        alert("Vehículo agregado correctamente");
-
-        document.getElementById("ingresar-patente").value = "";
-        document.getElementById("ingresar-nombre-camion").value = "";
-        document.getElementById("ingresar-conductor").value = "";
-
-        cargarVehiculos();
-    })
-    .catch(err => {
-        console.error("Error REAL:", err.message);
-        alert("Error: " + err.message);
+        guardarVehiculoReal();
     });
 }
 
@@ -417,7 +407,7 @@ function seleccionarVehiculo(v) {
 function guardarCambios() {
 
     if (!vehiculoSeleccionado) {
-        alert("Selecciona un vehículo primero");
+        mostrarMensaje("Error", "Selecciona un vehículo primero");
         return;
     }
 
@@ -425,49 +415,16 @@ function guardarCambios() {
     const estado = document.getElementById("modificar-estado-modificar").value.trim();
 
     if (!rutConductor || !estado) {
-        alert("Completa los campos");
+        mostrarMensaje("Error", "Completa los campos");
         return;
     }
 
-    const confirmar = confirm("¿Guardar cambios?");
-    if (!confirmar) return;
+    mostrarConfirmacion("Guardar cambios", "¿Guardar cambios?", (ok) => {
+        if (!ok) return;
 
-    const vehiculoModificado = {
-        patente: vehiculoSeleccionado.patente,
-        RutConductor: rutConductor,
-        estado: estado
-    };
-
-    console.log("ENVIANDO:", vehiculoModificado);
-
-    fetch("http://localhost:5087/api/vehiculo/modificar", {
-        method: "POST", 
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(vehiculoModificado)
-    })
-    .then(async res => {
-        const texto = await res.text();
-        console.log("RESPUESTA:", texto);
-
-        if (!res.ok) throw new Error(texto);
-
-        return texto ? JSON.parse(texto) : {};
-    })
-    .then(() => {
-        alert("Vehículo actualizado");
-
-        // refrescar TODO
-        cargarVehiculos();
-        cargarListaVehiculos();
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error al actualizar");
+        guardarCambiosReal();
     });
 }
-
 
 // =======================
 // PAGINACIÓN VEHÍCULOS
@@ -522,3 +479,119 @@ function anteriorRetrasos() {
         actualizarRetrasos();
     }
 }
+
+function mostrarMensaje(titulo, mensaje) {
+
+    const modal = document.getElementById("modalMensaje");
+
+    document.getElementById("modalTitulo").textContent = titulo;
+    document.getElementById("modalTexto").textContent = mensaje;
+
+    const botones = document.getElementById("modalBotones");
+    botones.innerHTML = `<button class="btn-aceptar">OK</button>`;
+
+    modal.style.display = "flex";
+
+    botones.querySelector("button").onclick = () => {
+        modal.style.display = "none";
+    };
+}
+
+function mostrarConfirmacion(titulo, mensaje, callback) {
+
+    const modal = document.getElementById("modalMensaje");
+
+    document.getElementById("modalTitulo").textContent = titulo;
+    document.getElementById("modalTexto").textContent = mensaje;
+
+    const botones = document.getElementById("modalBotones");
+
+    botones.innerHTML = `
+        <button class="btn-cancelar">Cancelar</button>
+        <button class="btn-aceptar">Aceptar</button>
+    `;
+
+    modal.style.display = "flex";
+
+    botones.querySelector(".btn-aceptar").onclick = () => {
+        modal.style.display = "none";
+        callback(true);
+    };
+
+    botones.querySelector(".btn-cancelar").onclick = () => {
+        modal.style.display = "none";
+        callback(false);
+    };
+}
+
+function guardarVehiculoReal() {
+
+    const patente = document.getElementById("ingresar-patente").value.trim();
+    const nombre = document.getElementById("ingresar-nombre-camion").value.trim();
+    const rutConductor = document.getElementById("ingresar-conductor").value;
+
+    const nuevoVehiculo = {
+        patente: patente,
+        NombreVehiculo: nombre,
+        RutConductor: rutConductor
+    };
+
+    fetch("http://localhost:5087/api/vehiculo/agregar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(nuevoVehiculo)
+    })
+    .then(async res => {
+        const texto = await res.text();
+
+        if (!res.ok) throw new Error(texto);
+
+        return JSON.parse(texto);
+    })
+    .then(() => {
+        mostrarMensaje("Éxito", "Vehículo agregado correctamente");
+
+        cargarVehiculos();
+    })
+    .catch(err => {
+        mostrarMensaje("Error", err.message);
+    });
+}
+
+function guardarCambiosReal() {
+
+    const vehiculoModificado = {
+        patente: vehiculoSeleccionado.patente,
+        RutConductor: document.getElementById("modificar-conductor-modificar").value,
+        estado: document.getElementById("modificar-estado-modificar").value.trim()
+    };
+
+    fetch("http://localhost:5087/api/vehiculo/modificar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(vehiculoModificado)
+    })
+    .then(async res => {
+        const texto = await res.text();
+
+        if (!res.ok) throw new Error(texto);
+
+        return texto ? JSON.parse(texto) : {};
+    })
+    .then(() => {
+        mostrarMensaje("Éxito", "Vehículo actualizado");
+
+        cargarVehiculos();
+        cargarListaVehiculos();
+    })
+    .catch(err => {
+        mostrarMensaje("Error", err.message);
+    });
+}
+
+
+});
