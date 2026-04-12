@@ -35,20 +35,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //FILTROS
-    document.getElementById("filtroPatente")
-        ?.addEventListener("input", () => {
-            paginaIngreso = 1;
-            actualizarHistorial();
-        });
-
-    document.getElementById("filtroFecha")
-        ?.addEventListener("change", () => {
-            paginaIngreso = 1;
-            actualizarHistorial();
+    document.getElementById("input-buscar-ingreso")
+    ?.addEventListener("input", () => {
+        paginaIngreso = 1;
+        actualizarHistorial();
     });
 
+    document.getElementById("fechaFiltro")
+    ?.addEventListener("change", () => {
+        paginaIngreso = 1;
+        actualizarHistorial();
+    });
 });
-
 // LOGOUT 
 const btnLogout = document.getElementById("btnLogout");
 
@@ -122,7 +120,7 @@ function actualizarHistorial() {
 
         const coincidePatente = r.patente.toLowerCase().includes(patenteFiltro);
 
-        const coincideFecha = !fechaFiltro || r.fecha.includes(fechaFiltro);
+        const coincideFecha = !fechaFiltro || r.fecha === fechaFiltro;
 
         return coincidePatente && coincideFecha;
     });
