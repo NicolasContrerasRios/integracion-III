@@ -35,17 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //FILTROS
-    document.getElementById("input-buscar-ingreso")
-    ?.addEventListener("input", () => {
+    document.getElementById("btn-filtrar-ingreso")
+    ?.addEventListener("click", () => {
         paginaIngreso = 1;
         actualizarHistorial();
     });
 
-    document.getElementById("fechaFiltro")
-    ?.addEventListener("change", () => {
-        paginaIngreso = 1;
-        actualizarHistorial();
-    });
 });
 // LOGOUT 
 const btnLogout = document.getElementById("btnLogout");
@@ -111,29 +106,36 @@ function actualizarHistorial() {
 
     let datos = window.historialGlobal || [];
 
-    // filtros
-    const patenteFiltro = document.getElementById("filtroPatente")?.value.toLowerCase() || "";
-    const fechaFiltro = document.getElementById("filtroFecha")?.value || "";
+    // FILTROS (se leen aquí para que el botón funcione)
+    const patenteFiltro =
+        document.getElementById("input-buscar-ingreso")?.value.toLowerCase() || "";
+
+    const fechaFiltro =
+        document.getElementById("fechaFiltro")?.value || "";
 
     // aplicar filtros
     datos = datos.filter(r => {
 
-        const coincidePatente = r.patente.toLowerCase().includes(patenteFiltro);
+        const coincidePatente =
+            r.patente.toLowerCase().includes(patenteFiltro);
 
-        const coincideFecha = !fechaFiltro || r.fecha === fechaFiltro;
+        const coincideFecha =
+            !fechaFiltro || r.fecha === fechaFiltro;
 
         return coincidePatente && coincideFecha;
     });
 
-        const inicio = (paginaIngreso - 1) * filasIngreso;
-        const fin = inicio + filasIngreso;
+    //  paginación
+    const inicio = (paginaIngreso - 1) * filasIngreso;
+    const fin = inicio + filasIngreso;
 
     const pagina = datos.slice(inicio, fin);
 
     pagina.forEach(r => {
         tabla.innerHTML += `
             <tr>
-                <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
+                <td>
+                    <img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
                 <td>${r.patente}</td>
                 <td>${r.conductor}</td>
                 <td>${r.fecha}</td>
@@ -145,7 +147,6 @@ function actualizarHistorial() {
 
     document.getElementById("paginaIngreso").textContent = paginaIngreso;
 }
-
 function cargarRetrasos() {
 
     fetch("http://localhost:5087/api/Registro/atrasos")

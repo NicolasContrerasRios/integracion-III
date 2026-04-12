@@ -147,6 +147,11 @@ html, body {
     color: #aaa;
 }
 
+#btn-filtrar-ingreso {
+    margin-left: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
 /* ========================
    PANELES / GRÁFICOS
 ======================== */
