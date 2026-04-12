@@ -597,6 +597,29 @@ body.dark-mode .tabla-ingreso tbody tr:hover {
     max-height: 320px;   
     overflow-y: auto;    
     padding-right: 5px;
+
+    scrollbar-width: thin;
+    scrollbar-color: #ff8533 #f2f2f2;
+}
+
+.lista-vehiculos::-webkit-scrollbar {
+    width: 6px;   
+}
+
+.lista-vehiculos::-webkit-scrollbar-track {
+    background: #f2f2f2;
+    border-radius: 10px;
+}
+
+.lista-vehiculos::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ff8533, #ff6600);
+    border-radius: 10px;
+    border: 1px solid #f2f2f2;
+}
+
+/* hover del scroll */
+.lista-vehiculos::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ff6600, #cc5200);
 }
 
 .lista-vehiculos p {
