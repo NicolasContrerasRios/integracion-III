@@ -118,23 +118,25 @@
 
 <section id="vista-ingresosalida" class="vista">
     <h2 style="text-align:center;">Ingreso y Salida</h2>
+
     <div class="barra-superior">
 
-    <div class="buscador">
-        <span class="icono-buscar">&#128269;</span>
-        <input type="text" placeholder="Buscar Patente..." id="input-buscar-ingreso">
+        <div class="filtros-izquierda">
+            <div class="buscador">
+                <span class="icono-buscar">&#128269;</span>
+                <input type="text" placeholder="Buscar Patente..." id="input-buscar-ingreso">
+            </div>
+
+            <div class="icono-calendario">
+                <input type="date" id="fechaFiltro">
+            </div>
+        </div>
+
+        <div class="filtros-derecha">
+            <button id="btn-filtrar-ingreso" class="btn-guardar">Filtrar</button>
+        </div>
+
     </div>
-
-    <div class="icono-calendario">
-        <input type="date" id ="fechaFiltro">
-    </div>
-
-    <div>
-        <button id="btn-filtrar-ingreso" class="btn-guardar">Filtrar</button>
-    </div>
-
-</div>
-
 
 <div class="tabla-container">
 

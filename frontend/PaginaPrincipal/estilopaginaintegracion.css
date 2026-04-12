@@ -87,16 +87,16 @@ html, body {
 ======================== */
 .filtro-procesos {
     position: relative;
-    width: 15vw; /* antes 220px */
+    width: 15vw; 
 }
 
 .filtro-btn {
     display: flex;
     align-items: center;
-    gap: 0.6vw; /* antes 6px */
+    gap: 0.6vw; 
     background: #333;
     color: white;
-    padding: 0.8vh 1vw; /* antes 8px */
+    padding: 0.8vh 1vw; 
     border-radius: 1vw;
     cursor: pointer;
     text-align: center;
@@ -104,13 +104,13 @@ html, body {
 
 .filtro-btn img {
     width: 20px;
-    height: 20px; /* se mantiene fijo */
+    height: 20px; 
 }
 
 .filtro-panel {
     position: absolute;
     top: 120%;
-    width: 18vw; /* antes 250px */
+    width: 18vw; 
     background: #1f1f1f;
     border-radius: 1vw;
     display: none;
@@ -120,7 +120,7 @@ html, body {
 .filtro-item {
     display: flex;
     align-items: center;
-    gap: 1vw; /* antes 10px */
+    gap: 1vw; 
     padding: 1vh;
     color: white;
     cursor: pointer;
@@ -152,6 +152,56 @@ html, body {
     padding: 8px 20px;
     font-weight: bold;
 }
+
+.barra-superior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    width: 100%;
+}
+
+.buscador {
+    display: flex;
+    align-items: center;
+    padding: 0.6vh 1vw;
+    border-radius: 0.8vw;
+}
+
+.btn-filtrar-container #btn-filtrar-ingreso {
+    background: #ff7a00;
+    color: white;
+    border: none;
+    padding: 1vh 2vw;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.8vw;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-filtrar-container #btn-filtrar-ingreso:hover {
+    background: #e86d00;
+    transform: scale(1.05);
+}
+.filtros-izquierda {
+    display: flex;
+    align-items: center;
+    gap: 0.3vw; 
+}
+
+.filtros-derecha {
+    display: flex;
+    align-items: center;
+}
+
+.buscador,
+.icono-calendario {
+    display: flex;
+    align-items: center;
+    padding: 0.6vh 1vw;
+    border-radius: 0.8vw;
+}
+
 /* ========================
    PANELES / GRÁFICOS
 ======================== */
@@ -544,6 +594,9 @@ body.dark-mode .tabla-ingreso tbody tr:hover {
 .lista-vehiculos {
     width: 40%;
     border-right: 2px solid #ddd;
+    max-height: 320px;   
+    overflow-y: auto;    
+    padding-right: 5px;
 }
 
 .lista-vehiculos p {
