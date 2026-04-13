@@ -617,7 +617,7 @@ body.dark-mode .tabla-ingreso tbody tr:hover {
     border: 1px solid #f2f2f2;
 }
 
-/* hover del scroll */
+
 .lista-vehiculos::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(180deg, #ff6600, #cc5200);
 }
@@ -813,7 +813,7 @@ body.dark-mode footer {
     font-weight: bold;
 }
 
-/* COMBOBOX ESTILO AGREGAR */
+/* ESTILO COMBOBOX AGREGAR */
 .form-grid select {
     padding: 8px;
     border-radius: 15px;
@@ -839,7 +839,7 @@ body.dark-mode .form-grid select {
     border-color: #ff8533;
 }
 
-/* COMBOBOX ESTILO MODIFICAR */
+/* ESTILO COMBOBOX   */
 .form-modificar select {
     width: 100%;
     padding: 12px 15px;
@@ -884,8 +884,6 @@ body.dark-mode .form-grid select {
 
     z-index: 9999;
 }
-
-/* CAJA DEL MODAL */
 .modal-box {
     background: white;
     padding: 25px 30px;
@@ -916,7 +914,7 @@ body.dark-mode .form-grid select {
     color: #333;
 }
 
-/* TEXTO */
+/* TEXTO  */
 .modal-box p {
     margin-bottom: 20px;
     color: #555;
@@ -929,7 +927,6 @@ body.dark-mode .form-grid select {
     gap: 10px;
 }
 
-/* BOTÓN ACEPTAR */
 .btn-aceptar {
     background: #ff6600;
     color: white;
@@ -943,7 +940,6 @@ body.dark-mode .form-grid select {
     background: #cc5200;
 }
 
-/* BOTÓN CANCELAR */
 .btn-cancelar {
     background: #ccc;
     border: none;

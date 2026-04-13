@@ -58,7 +58,7 @@ if (btnLogout) {
     });
 }
 
-    //TABLAS INGRESO Y SALIDA 
+    //TABLAS 
     function cargarHistorial() {
         console.log("Entró a cargarHistorial");
 
@@ -106,7 +106,7 @@ function actualizarHistorial() {
 
     let datos = window.historialGlobal || [];
 
-    // FILTROS (se leen aquí para que el botón funcione)
+    // FILTROS
     const patenteFiltro =
         document.getElementById("input-buscar-ingreso")?.value.toLowerCase() || "";
 
@@ -158,14 +158,13 @@ function cargarRetrasos() {
             let registros = data.registro || data.Registro || [];
             let detalles = data.detalles || data.Detalles || [];
 
-            // guardar global
+            // guardar globalmente los datos
             window.retrasosGlobal = registros;
             window.detallesGlobal = detalles;
 
-            // reiniciar página
+            // reinicia página
             paginaRetrasos = 1;
 
-            // render
             actualizarRetrasos();
         })
         .catch(err => console.error("Error atrasos:", err));
@@ -394,7 +393,7 @@ function seleccionarVehiculo(v) {
     //estado
     document.getElementById("modificar-estado-modificar").value = v.estado || "";
 
-    //conductor → buscar por nombre
+    //buscar por nombre
     const select = document.getElementById("modificar-conductor-modificar");
 
     for (let option of select.options) {
@@ -427,9 +426,9 @@ function guardarCambios() {
     });
 }
 
-// =======================
+//CAMBIO DE PAGINAS DE TABLAS
+
 // PAGINACIÓN VEHÍCULOS
-// =======================
 function siguienteVehiculos() {
     const total = window.vehiculosGlobal?.length || 0;
     if (paginaVehiculos * filasVehiculos < total) {
@@ -445,9 +444,7 @@ function anteriorVehiculos() {
     }
 }
 
-// =======================
 // PAGINACIÓN INGRESO
-// =======================
 function siguienteIngreso() {
     const total = window.historialGlobal?.length || 0;
     if (paginaIngreso * filasIngreso < total) {
@@ -463,9 +460,7 @@ function anteriorIngreso() {
     }
 }
 
-// =======================
 // PAGINACIÓN RETRASOS
-// =======================
 function siguienteRetrasos() {
     const total = window.retrasosGlobal?.length || 0;
     if (paginaRetrasos * filasRetrasos < total) {
