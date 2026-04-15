@@ -66,28 +66,29 @@ namespace backend.Controllers
                 return BadRequest(new { mensaje = "Datos del dispositivo no pueden ser nulos." });
             }
 
+            // Verificar estado del vehículo
+            var vehiculo = _vehiculoRepo.ObtenerTodos().FirstOrDefault(v => v.Patente == dispositivo.Patente);
+            if (vehiculo != null && vehiculo.Estado == "Fuera de servicio")
+            {
+                return BadRequest(new { mensaje = "El vehículo está fuera de servicio y no puede registrar entrada ni salida." });
+            }
+
             var tipo = dispositivo.ObtenerTipoRegistro();
             var ordenes = _ordenRepo.ObtenerTodos();
 
-            // Parse and convert to Santiago time
-            var dt = DateTime.ParseExact($"{dispositivo.Fecha} {dispositivo.Hora}", "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-            var dto = new DateTimeOffset(dt, TimeSpan.Zero);
-            var santiagoTz = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
-            var santiagoTime = TimeZoneInfo.ConvertTime(dto, santiagoTz);
 
             if (tipo == "entrada")
             {
                 var entrada = new RegistroEntrada
                 {
                     Patente = dispositivo.Patente,
-                    Fecha = DateOnly.FromDateTime(santiagoTime.DateTime),
-                    Hora = TimeOnly.FromDateTime(santiagoTime.DateTime)
+                    Fecha = dispositivo.Fecha,
+                    Hora = dispositivo.Hora
                 };
 
                 var entradaGuardada = _registroEntradaRepo.Agregar(entrada);
                 
                 // Actualizar estado del vehículo a "Disponible"
-                var vehiculo = _vehiculoRepo.ObtenerTodos().FirstOrDefault(v => v.Patente == dispositivo.Patente);
                 if (vehiculo != null)
                 {
                     vehiculo.Estado = "Disponible";
@@ -124,7 +125,7 @@ namespace backend.Controllers
 
             if (tipo == "salida")
             {
-                if (!VerificarRangoHora(TimeOnly.Parse(santiagoTime.ToString("HH:mm"))))
+                if (!VerificarRangoHora(TimeOnly.Parse(dispositivo.Hora.ToString("HH:mm:ss"))))
                 {
                     return BadRequest(new { mensaje = "La hora de salida está fuera del rango permitido (08:00 - 18:00)." });
                 }
@@ -132,14 +133,13 @@ namespace backend.Controllers
                 var salida = new RegistroSalida
                 {
                     Patente = dispositivo.Patente,
-                    Fecha = DateOnly.FromDateTime(santiagoTime.DateTime),
-                    Hora = TimeOnly.FromDateTime(santiagoTime.DateTime)
+                    Fecha = dispositivo.Fecha,
+                    Hora = dispositivo.Hora
                 };
 
                 var salidaGuardada = _registroSalidaRepo.Agregar(salida);
                 
                 // Actualizar estado del vehículo a "En transito"
-                var vehiculo = _vehiculoRepo.ObtenerTodos().FirstOrDefault(v => v.Patente == dispositivo.Patente);
                 if (vehiculo != null)
                 {
                     vehiculo.Estado = "En transito";
