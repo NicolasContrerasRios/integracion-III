@@ -7,7 +7,6 @@ namespace backend.Domain
     {
         [Key]
         public int Id { get; set; }
-
         public int Id_Entrada { get; set; }
         public int Id_Salida { get; set; }
         public int Horas_Totales { get; set; }

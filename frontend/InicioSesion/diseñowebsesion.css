@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com Hat Mono");
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@300;400;500;600;700&display=swap");
 
 body {
     margin: 0;
@@ -147,4 +147,30 @@ body {
 
 .input-group input:focus {
     border-bottom: 2px solid #ff6600;
+}
+
+/* DISEÑO VISUAL DE MENSAJE DE ERROR  */
+
+.mensaje-login {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    display: none;
+}
+
+.mensaje-login.error {
+    display: block;
+    background: #ffe5e5;
+    color: #cc0000;
+    border: 1px solid #ffb3b3;
+}
+
+.mensaje-login.exito {
+    display: block;
+    background: #e8ffe5;
+    color: #1f7a1f;
+    border: 1px solid #9be29b;
 }

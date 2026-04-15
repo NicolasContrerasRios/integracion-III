@@ -10,7 +10,7 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class VehiculoController : ControllerBase
     {
-        private readonly IVehiculoRepository _repo;
+        private readonly IVehiculoRepository _vehiculoRepo;
         private readonly ITurnoRepository _turnoRepo;
         private readonly IConductorRepository _conductorRepo;
         private readonly IRegistroEntradaRepository _registroEntradaRepo;
@@ -18,7 +18,7 @@ namespace backend.Controllers
 
         public VehiculoController(IVehiculoRepository repo, ITurnoRepository turnoRepo, IConductorRepository conductorRepo, IRegistroEntradaRepository registroEntradaRepo, IRegistroSalidaRepository registroSalidaRepo)
         {
-            _repo = repo;
+            _vehiculoRepo = repo;
             _turnoRepo = turnoRepo;
             _conductorRepo = conductorRepo;
             _registroEntradaRepo = registroEntradaRepo;
@@ -29,7 +29,7 @@ namespace backend.Controllers
         public IActionResult Get()
         {
             /*return Ok(_repo.ObtenerTodos());*/
-            var vehiculos = _repo.ObtenerTodos();
+            var vehiculos = _vehiculoRepo.ObtenerTodos();
             var turnos = _turnoRepo.ObtenerTodos();
             var conductores = _conductorRepo.ObtenerTodos();
             var registrosEntrada = _registroEntradaRepo.ObtenerTodos();
@@ -38,6 +38,21 @@ namespace backend.Controllers
             return Ok(GetVehiculosConConductores(vehiculos, turnos, conductores, registrosEntrada, registrosSalida));
         }
 
+        [HttpGet("conductores")]
+        public IActionResult GetConductores()
+        {
+            var conductores = _conductorRepo.ObtenerTodos();
+
+            var resultado = conductores.Select(c => new
+            {
+                nombre = c.Nombre,
+                rut = c.Rut
+            }).ToList();
+
+            return Ok(resultado);
+        }
+        
+
         [HttpPost("agregar")]
         public IActionResult Post([FromBody] VehiculoTurnoRequest request)
         {
@@ -45,12 +60,12 @@ namespace backend.Controllers
             {
                 Patente = request.Patente,
                 Nombre = request.NombreVehiculo,
-                Estado = "activo"
+                Estado = "Disponible"
             };
-            _repo.Agregar(vehiculo);
+            _vehiculoRepo.Agregar(vehiculo);
 
             var conductores = _conductorRepo.ObtenerTodos();
-            var conductor = conductores.FirstOrDefault(c => c.Nombre == request.NombreConductor);
+            var conductor = conductores.FirstOrDefault(c => c.Rut == request.RutConductor);
             if (conductor == null)
             {
                 return BadRequest("Conductor no encontrado");
@@ -64,12 +79,12 @@ namespace backend.Controllers
             };
             _turnoRepo.Agregar(turno);
 
-            return Ok();
+            return Ok(vehiculo);
         }
         [HttpPost("modificar")]
         public IActionResult Modificar([FromBody] VehiculoModificarRequest request)
         {
-            var vehiculos = _repo.ObtenerTodos();
+            var vehiculos = _vehiculoRepo.ObtenerTodos();
             var vehiculo = vehiculos.FirstOrDefault(v => v.Patente == request.Patente);
             if (vehiculo == null)
             {
@@ -77,10 +92,10 @@ namespace backend.Controllers
             }
 
             vehiculo.Estado = request.Estado;
-            _repo.Modificar(vehiculo);
+            _vehiculoRepo.Modificar(vehiculo);
 
             var conductores = _conductorRepo.ObtenerTodos();
-            var conductor = conductores.FirstOrDefault(c => c.Nombre == request.Conductor);
+            var conductor = conductores.FirstOrDefault(c => c.Rut == request.RutConductor);
             if (conductor == null)
             {
                 return BadRequest("Conductor no encontrado");
@@ -94,20 +109,20 @@ namespace backend.Controllers
             };
             _turnoRepo.Agregar(turno);
 
-            return Ok();
+            return Ok(vehiculo);
         }
 
         public class VehiculoModificarRequest
         {
             public string Patente { get; set; }
-            public string Conductor { get; set; }
+            public string RutConductor { get; set; }
             public string Estado { get; set; }
         }
         public class VehiculoTurnoRequest
         {
             public string Patente { get; set; }
             public string NombreVehiculo { get; set; }
-            public string NombreConductor { get; set; }
+            public string RutConductor { get; set; }
         }
 
         private IEnumerable<object> GetVehiculosConConductores(List<Vehiculo> vehiculos, List<Turno> turnos, List<Conductor> conductores, List<RegistroEntrada> registrosEntrada, List<RegistroSalida> registrosSalida)

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com Hat Mono");
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@300;400;500;600;700&display=swap");
 
 /* ========================
    CUERPO Y ESTRUCTURA GENERAL
@@ -8,12 +8,12 @@ body {
     flex-direction: column;
     margin: 0;
     font-family: 'Red Hat Mono', monospace;
-    background: #ffffff;
+    background: #f4f0f0;
 }
 
 html, body {
     height: 100%;
-}
+}   
 
 .vista {
     display: none;
@@ -45,7 +45,7 @@ html, body {
     border-radius: 5px;
 }
 
-.hencabezado-bar.normal {
+.encabezado-bar.normal {
     background: #222;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
@@ -87,16 +87,16 @@ html, body {
 ======================== */
 .filtro-procesos {
     position: relative;
-    width: 15vw; /* antes 220px */
+    width: 15vw; 
 }
 
 .filtro-btn {
     display: flex;
     align-items: center;
-    gap: 0.6vw; /* antes 6px */
+    gap: 0.6vw; 
     background: #333;
     color: white;
-    padding: 0.8vh 1vw; /* antes 8px */
+    padding: 0.8vh 1vw; 
     border-radius: 1vw;
     cursor: pointer;
     text-align: center;
@@ -104,13 +104,13 @@ html, body {
 
 .filtro-btn img {
     width: 20px;
-    height: 20px; /* se mantiene fijo */
+    height: 20px; 
 }
 
 .filtro-panel {
     position: absolute;
     top: 120%;
-    width: 18vw; /* antes 250px */
+    width: 18vw; 
     background: #1f1f1f;
     border-radius: 1vw;
     display: none;
@@ -120,7 +120,7 @@ html, body {
 .filtro-item {
     display: flex;
     align-items: center;
-    gap: 1vw; /* antes 10px */
+    gap: 1vw; 
     padding: 1vh;
     color: white;
     cursor: pointer;
@@ -147,6 +147,61 @@ html, body {
     color: #aaa;
 }
 
+#btn-filtrar-ingreso {
+    margin-left: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+.barra-superior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    width: 100%;
+}
+
+.buscador {
+    display: flex;
+    align-items: center;
+    padding: 0.6vh 1vw;
+    border-radius: 0.8vw;
+}
+
+.btn-filtrar-container #btn-filtrar-ingreso {
+    background: #ff7a00;
+    color: white;
+    border: none;
+    padding: 1vh 2vw;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.8vw;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-filtrar-container #btn-filtrar-ingreso:hover {
+    background: #e86d00;
+    transform: scale(1.05);
+}
+.filtros-izquierda {
+    display: flex;
+    align-items: center;
+    gap: 0.3vw; 
+}
+
+.filtros-derecha {
+    display: flex;
+    align-items: center;
+}
+
+.buscador,
+.icono-calendario {
+    display: flex;
+    align-items: center;
+    padding: 0.6vh 1vw;
+    border-radius: 0.8vw;
+}
+
 /* ========================
    PANELES / GRÁFICOS
 ======================== */
@@ -156,13 +211,15 @@ html, body {
 }
 
 .contenedor-graficos {
-    width: 60%;
+    width: 600px;   
+    height: 400px;  
     margin: 3vh auto;
     background: white;
-    padding: 2vh 2vw;
-    border-radius: 1vw;
+    padding: 20px;
+    border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     position: relative;
+    max-width: 90%;
 }
 
 .top-grafico {
@@ -184,13 +241,13 @@ html, body {
 .paneles-info {
     display: flex;
     justify-content: center;
-    gap: 2vw; /* antes 20px */
+    gap: 2vw; 
     margin-bottom: 2.5vh;
 }
 
 .panel {
-    width: 18vw; /* antes 280px */
-    padding: 1.5vh 2vw; /* antes 15px 20px */
+    width: 18vw; 
+    padding: 1.5vh 2vw; 
     border-radius: 1.2vw;
     text-align: left;
     color: white;
@@ -218,6 +275,11 @@ html, body {
     margin-top: 0.8vh;
 }
 
+#miGrafico {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 /* ========================
    TABLAS
 ======================== */
@@ -243,7 +305,7 @@ html, body {
 .tabla-ingreso th {
     background: #ff8533;
     color: white;
-    padding: 12px; /* se mantiene fijo */
+    padding: 12px; 
     font-weight: bold;
     border-bottom: 2px solid #ff6600;
 }
@@ -255,39 +317,64 @@ html, body {
     border-bottom: 1px solid #ddd;
 }
 
+/* MODO NORMAL */
+.tabla-vehiculos tbody tr:nth-child(even),
+.tabla-ingreso tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.tabla-vehiculos tbody tr:hover,
+.tabla-ingreso tbody tr:hover {
+    background: #fff3eb;
+}
+
+/* MODO OSCURO */
+body.dark-mode .tabla-vehiculos tbody tr:nth-child(even),
+body.dark-mode .tabla-ingreso tbody tr:nth-child(even) {
+    background: #2a2a2a;
+}
+
+body.dark-mode .tabla-vehiculos tbody tr:hover,
+body.dark-mode .tabla-ingreso tbody tr:hover {
+    background: #333;
+}
+
 /* TABLA RETRASOS */
 .contenedor-retrasos {
     width: 80%;
     margin: 4vh auto;
     display: flex;
-    border: 4px solid black;
     border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .tabla-retrasos {
     width: 60%;
-    border-right: 2px solid black;
+    border-right: 2px solid #ccc;
 }
 
 .tabla-retrasos table {
     width: 100%;
     border-collapse: collapse;
+    background: white;
 }
 
 .tabla-retrasos th {
     background: #ff8533;
     color: white;
-    padding: 8px; /* se mantiene fijo */
+    padding: 8px; 
     font-weight: bold;
     border-bottom: 2px solid #ff6600;
 }
 
 .tabla-retrasos td {
-    padding: 20px 10px; /* se mantiene fijo */
+    padding: 20px 10px; 
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
+
+
 
 /* ========================
    ICONOS
@@ -391,6 +478,7 @@ html, body {
 .panel-retrasos {
     width: 45%;
     padding: 3vh;
+    background: white;
 }
 
 .panel-retrasos h3 {
@@ -398,11 +486,18 @@ html, body {
 }
 
 .campo {
-    width: 200px;
-    height: 35px;
-    background: #ff8533;
+    background-color: #ff7f32;
     border-radius: 20px;
-    margin-bottom: 2.5vh;
+    padding: 10px 15px;
+
+    display: inline-flex;
+    align-items: center;      
+    justify-content: center;  
+
+    color: black;
+    font-weight: bold;
+
+    min-width: 120px;
 }
 
 .fila {
@@ -499,6 +594,32 @@ html, body {
 .lista-vehiculos {
     width: 40%;
     border-right: 2px solid #ddd;
+    max-height: 320px;   
+    overflow-y: auto;    
+    padding-right: 5px;
+
+    scrollbar-width: thin;
+    scrollbar-color: #ff8533 #f2f2f2;
+}
+
+.lista-vehiculos::-webkit-scrollbar {
+    width: 6px;   
+}
+
+.lista-vehiculos::-webkit-scrollbar-track {
+    background: #f2f2f2;
+    border-radius: 10px;
+}
+
+.lista-vehiculos::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ff8533, #ff6600);
+    border-radius: 10px;
+    border: 1px solid #f2f2f2;
+}
+
+
+.lista-vehiculos::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ff6600, #cc5200);
 }
 
 .lista-vehiculos p {
@@ -594,9 +715,28 @@ body.dark-mode .encabezado-bar {
 body.dark-mode .contenedor-graficos,
 body.dark-mode .tabla-vehiculos,
 body.dark-mode .tabla-ingreso,
+body.dark-mode .tabla-retrasos,
+body.dark-mode .tabla-retrasos table,
 body.dark-mode .tarjeta-admin {
     background: #1e1e1e;
     color: white;
+}
+
+body.dark-mode .panel-retrasos {
+    background: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .contenedor-retrasos {
+    border-color: #444;
+}
+
+body.dark-mode .tabla-retrasos {
+    border-right-color: #444;
+}
+
+body.dark-mode .tabla-retrasos td {
+    border-bottom-color: #333;
 }
 
 body.dark-mode th {
@@ -638,4 +778,176 @@ body.dark-mode footer {
 /*AJUSTE SWITCH*/
 .switch {
     margin: 0 5px;
+}
+
+/*ENTRADA Y SALIDA COLORES*/
+.entrada {
+    color: green;
+    font-weight: bold;
+}
+
+.salida {
+    color: red;
+    font-weight: bold;
+}
+
+/*SELECCION TABLAS RETRASO*/    
+#tablaRetrasosBD tr.activo {
+    background-color: #ffe0c2;
+    transition: 0.2s;
+}
+
+/*COLORES DE ESTADO TABLA DE VEHICULOS*/
+.estado-disponible {
+    color: green;
+    font-weight: bold;
+}
+
+.estado-transito {
+    color: orange;
+    font-weight: bold;
+}
+
+.estado-fuera {
+    color: red;
+    font-weight: bold;
+}
+
+/* ESTILO COMBOBOX AGREGAR */
+.form-grid select {
+    padding: 8px;
+    border-radius: 15px;
+    border: 2px solid #ff8533;
+    font-size: 13px;
+    font-family: 'Red Hat Mono', monospace;
+    background: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.form-grid select:hover {
+    border-color: #ff6600;
+}
+.form-grid select:focus {
+    outline: none;
+    border-color: #ff6600;
+    box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
+}
+
+body.dark-mode .form-grid select {
+    background: #1e1e1e;
+    color: white;
+    border-color: #ff8533;
+}
+
+/* ESTILO COMBOBOX   */
+.form-modificar select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 25px;
+    border: 2px solid orange;
+    background-color: white;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.form-modificar select:hover {
+    border-color: darkorange;
+}
+
+.form-modificar select:focus {
+    border-color: orangered;
+    box-shadow: 0 0 5px rgba(255, 140, 0, 0.5);
+}
+
+.form-modificar select option {
+    background-color: white;
+    color: black;
+}
+
+/* PANELES DE NOTIFICACIONES */
+
+/* FONDO OSCURO */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+.modal-box {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 15px;
+    width: 320px;
+    text-align: center;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+    animation: aparecer 0.2s ease;
+}
+
+/* ANIMACIÓN */
+@keyframes aparecer {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* TÍTULO */
+.modal-box h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* TEXTO  */
+.modal-box p {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* BOTONES */
+.modal-botones {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-aceptar {
+    background: #ff6600;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-aceptar:hover {
+    background: #cc5200;
+}
+
+.btn-cancelar {
+    background: #ccc;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-cancelar:hover {
+    background: #aaa;
 }

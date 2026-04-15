@@ -8,6 +8,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
+<div id="modalMensaje" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <h3 id="modalTitulo"></h3>
+        <p id="modalTexto"></p>
+
+        <div class="modal-botones" id="modalBotones"></div>
+    </div>
+</div>
+
+
 <body>
 
     <!-- ENCABEZADO--> 
@@ -16,7 +26,7 @@
     <div class="filtro-procesos">
 
         <div class="filtro-btn" id="filtroBtn">
-            <img id="filtroImg" src="https://icones.pro/wp-content/uploads/2021/02/icone-de-la-maison-orange.png">
+            <img id="filtroImg" src="https://icones.pro/wp-content/uploads/2021/02/icone-de-la-maison-orange.png" alt = "">
             <span id="filtroTexto">Inicio</span> ▼
         </div>
 
@@ -70,7 +80,7 @@
 
         </div>
 
-        <button class="logout">Cerrar sesión</button>
+        <button id = "btnLogout" class="logout">Cerrar sesión</button>
     </div>
 
 </header>
@@ -86,13 +96,13 @@
         <!-- PANEL: órdenes completadas HOY -->
         <div class="panel naranja">
             <h3>Completadas hoy</h3>
-            <p id="cantidad-completadas-hoy" class="numero">0 <!-- backend llenará esto --></p>
+            <p id="cantidad-completadas-hoy" class="numero">0</p>
         </div>
 
         <!-- PANEL: órdenes completadas MES -->
         <div class="panel naranja">
             <h3>Completadas en el mes</h3>
-            <p id="cantidad-completadas-mes" class="numero">0 <!-- backend llenará esto --></p>
+            <p id="cantidad-completadas-mes" class="numero">0</p>
         </div>
 
     </div>
@@ -108,19 +118,25 @@
 
 <section id="vista-ingresosalida" class="vista">
     <h2 style="text-align:center;">Ingreso y Salida</h2>
+
     <div class="barra-superior">
 
-    <div class="buscador">
-        <span class="icono-buscar">&#128269;</span>
-        <input type="text" placeholder="Buscar..." id="input-buscar-ingreso">
+        <div class="filtros-izquierda">
+            <div class="buscador">
+                <span class="icono-buscar">&#128269;</span>
+                <input type="text" placeholder="Buscar Patente..." id="input-buscar-ingreso">
+            </div>
+
+            <div class="icono-calendario">
+                <input type="date" id="fechaFiltro">
+            </div>
+        </div>
+
+        <div class="filtros-derecha">
+            <button id="btn-filtrar-ingreso" class="btn-guardar">Filtrar</button>
+        </div>
+
     </div>
-
-    <div class="icono-calendario">
-        <input type="date" id ="fechaFiltro">
-    </div>
-
-</div>
-
 
 <div class="tabla-container">
 
@@ -131,25 +147,20 @@
                 <th>Patente</th>
                 <th>Conductor</th>
                 <th>Fecha</th>
-                <th>Hora Ingreso</th>
-                <th>Hora Salida</th>
+                <th>Tipo Registro</th>
+                <th>Hora</th>
             </tr>
         </thead>
 
         <tbody id="tabla-ingreso">
-            <tr>
-                <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
-                <!-- backend llenará esto -->
-            </tr>
         </tbody>
     </table>
-        <div class="paginacion paginacion-izquierda">
-            <button id="btnPrevIngreso" class="btn-flecha">&#8592;</button>
-            
-            <span id="paginaActualIngreso">1</span>
-            
-            <button id="btnNextIngreso" class="btn-flecha">&#8594;</button>
-        </div>
+    <div class="paginacion">
+        <button onclick="anteriorIngreso()">⬅</button>
+        <span id="paginaIngreso">1</span>
+        <button onclick="siguienteIngreso()">➡</button>
+        
+    </div>
 </div>
 </section>
 
@@ -172,21 +183,16 @@
         </thead>
         
         <tbody id="tabla-vehiculos-bd">
-            <td><img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion"></td>
-            <!-- backend llenará esto -->
+
         </tbody>
 
     </table>
 
-    <div class="paginacion paginacion-vehiculos">
-        <button id="btnPrevVehiculos" class="btn-flecha">&#8592;</button>
-
-        <span id="paginaActualVehiculos">1</span>
-
-        <button id="btnNextVehiculos" class="btn-flecha">&#8594;</button>
+    <div class="paginacion">
+        <button onclick="anteriorVehiculos()">⬅</button>
+        <span id="paginaVehiculos">1</span>
+        <button onclick="siguienteVehiculos()">➡</button>
     </div>
-
-</div>
 
 </div>
 
@@ -209,12 +215,6 @@
                     </tr>
                 </thead>
                 <tbody id="tablaRetrasosBD">
-                    <tr>
-                        <td>
-                            <img src="https://icones.pro/wp-content/uploads/2021/11/icone-orange-de-camion-d-expedition-et-de-livraison.png" class="icono-camion">
-                        </td>
-                        <!-- backend llenará esto -->
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -227,29 +227,27 @@
             <div class="fila">
                 <div>
                     <h3>Hora de entrada</h3>
-                    <div id="detalle-hora-salida" class="campo"><!-- backend llenará esto --></div>
+                    <div id="detalle-hora-salida" class="campo"></div>
                 </div>
 
                 <div>
                     <h3>Hora de Salida</h3>
-                    <div id="detalle-horario" class="campo"><!-- backend llenará esto --></div>
+                    <div id="detalle-horario" class="campo"></div>
                 </div>
             </div>
 
             <h3>Conductor</h3>
-            <div id="detalle-conductor" class="campo"><!-- backend llenará esto --></div>
+            <div id="detalle-conductor" class="campo"></div>
 
         </div>
 
     </section>
 
     <div class="tabla-container">
-        <div class="paginacion paginacion-izquierda">
-            <button id="btnPrevRetrasos" class="btn-flecha">&#8592;</button>
-            
-            <span id="paginaActualRetrasos">1</span>
-            
-            <button id="btnNextRetrasos" class="btn-flecha">&#8594;</button>
+        <div class="paginacion">
+            <button onclick="anteriorRetrasos()">⬅</button>
+            <span id="paginaRetrasos">1</span>
+            <button onclick="siguienteRetrasos()">➡</button>
         </div>
     </div>
 
@@ -276,7 +274,9 @@
             <div class="form-grid">
                 <input id="ingresar-patente" placeholder="Patente">
                 <input id="ingresar-nombre-camion" placeholder="Nombre camión">
-                <input id="ingresar-conductor" placeholder="Conductor">
+                <select id="ingresar-conductor">
+                    <option value="">Seleccionar conductor</option>
+                </select>            
             </div>
 
             <button id="boton-guardar-vehiculo" class="btn-guardar">Agregar</button>
@@ -296,12 +296,18 @@
             <div class="modificar-container">
 
                 <div id="lista-vehiculos" class="lista-vehiculos">
-                    <!-- backend llenará esto -->
                 </div>
 
                 <div class="form-modificar">
-                    <input id="modificar-conductor-modificar" placeholder="Conductor">
-                    <input id="modificar-estado-modificar" placeholder="Estado">
+                    <select id="modificar-conductor-modificar">
+                        <option value="">Conductor</option>
+                    </select>
+                    <select id="modificar-estado-modificar">
+                        <option value="">Estado</option>
+                        <option value="Disponible">Disponible</option>
+                        <option value="En transito">En tránsito</option>
+                        <option value="Fuera de servicio">Fuera de servicio</option>
+                    </select>
 
                     <button id="boton-guardar-cambios" class="btn-guardar">Guardar</button>
                 </div>
@@ -317,9 +323,12 @@
 </footer>
 
 <!-- SCRIPTS -->
+<script src="ConexionBackend.js"></script>
 <script src="grafico.js"></script>
 <script src="admin.js"></script>
-
+<script src="MenuSuperior.js"></script>
+<script src="CambioVista.js"></script>
+<script src="EfectoEncabezado.js"></script>
 
 </body>
 </html>

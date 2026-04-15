@@ -10,21 +10,20 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class OrdenController : ControllerBase
     {
-        private readonly IOrdenRepository _repo;
+        private readonly IOrdenRepository _orderRepo;
         private readonly IRegistroEntradaRepository _registroEntradaRepo;
-        private readonly IRegistroSalidaRepository _registroSalidaRepo;
 
-        public OrdenController(IOrdenRepository repo, IRegistroEntradaRepository registroEntradaRepo, IRegistroSalidaRepository registroSalidaRepo)
+        public OrdenController(IOrdenRepository orderRepository, IRegistroEntradaRepository registroEntradaRepo)
         {
-            _repo = repo;
+            _orderRepo = orderRepository;
             _registroEntradaRepo = registroEntradaRepo;
-            _registroSalidaRepo = registroSalidaRepo;
+
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            var ordenes = _repo.ObtenerTodos();
+            var ordenes = _orderRepo.ObtenerTodos();
             var registrosEntrada = _registroEntradaRepo.ObtenerTodos();
 
             return Ok(ObtenerOrdenesConFechas(ordenes, registrosEntrada));
@@ -40,7 +39,7 @@ namespace backend.Controllers
                     return BadRequest("La orden es requerida");
                 }
 
-                var ordenAgregada = _repo.Agregar(orden);
+                var ordenAgregada = _orderRepo.Agregar(orden);
                 if (ordenAgregada == null)
                 {
                     return BadRequest("No se pudo agregar la orden");
@@ -65,9 +64,6 @@ namespace backend.Controllers
             var result = ordenes.Select(o => new
             {
                 o.Id,
-                o.Id_Entrada,
-                o.Id_Salida,
-                o.Horas_Totales,
                 FechaEntrada = ObtenerFechaEntrada(o, registrosEntrada)
             }).ToList();
 
