@@ -49,6 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 }
 
+    const inputBuscarVehiculo = document.getElementById("input-buscar-vehiculo");
+
+    if (inputBuscarVehiculo) {
+        inputBuscarVehiculo.addEventListener("input", () => {
+            inputBuscarVehiculo.value = inputBuscarVehiculo.value.toUpperCase();
+        });
+    }
+
     document.getElementById("btn-limpiar-filtros")
     ?.addEventListener("click", () => {
 
