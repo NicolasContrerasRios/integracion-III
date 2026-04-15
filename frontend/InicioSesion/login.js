@@ -42,7 +42,7 @@ function iniciarSesion() {
 
         localStorage.setItem("usuario", usuario);
 
-        window.location.href = "PaginaIntegracion.html";
+        window.location.href = "/frontend/PaginaPrincipal/PaginaIntegracion.html";
     })
     .catch(err => {
         console.error("Error login:", err);

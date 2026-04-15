@@ -52,7 +52,7 @@ if (btnLogout) {
             if (!ok) return;
 
             localStorage.removeItem("usuario");
-            window.location.replace("iniciosesionweb.html");
+            window.location.replace("/frontend/inicioSesion/iniciosesionweb.html");
         });
 
     });
