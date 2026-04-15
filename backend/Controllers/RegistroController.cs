@@ -4,6 +4,7 @@ using backend.Infrastructure;
 using backend.Repositories;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 
 namespace backend.Controllers
 {
@@ -69,11 +70,17 @@ namespace backend.Controllers
 
             if (tipo == "entrada")
             {
+                // Parse and convert to Santiago time
+                var dt = DateTime.ParseExact($"{dispositivo.Fecha} {dispositivo.Hora}", "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                var dto = new DateTimeOffset(dt, TimeSpan.Zero);
+                var santiagoTz = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
+                var santiagoTime = TimeZoneInfo.ConvertTime(dto, santiagoTz);
+
                 var entrada = new RegistroEntrada
                 {
                     Patente = dispositivo.Patente,
-                    Fecha = dispositivo.Fecha,
-                    Hora = dispositivo.Hora
+                    Fecha = santiagoTime.ToString("yyyy-MM-dd"),
+                    Hora = santiagoTime.ToString("HH:mm:ss")
                 };
 
                 var entradaGuardada = _registroEntradaRepo.Agregar(entrada);
@@ -107,11 +114,17 @@ namespace backend.Controllers
 
             if (tipo == "salida")
             {
+                // Parse and convert to Santiago time
+                var dt = DateTime.ParseExact($"{dispositivo.Fecha} {dispositivo.Hora}", "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                var dto = new DateTimeOffset(dt, TimeSpan.Zero);
+                var santiagoTz = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
+                var santiagoTime = TimeZoneInfo.ConvertTime(dto, santiagoTz);
+
                 var salida = new RegistroSalida
                 {
                     Patente = dispositivo.Patente,
-                    Fecha = dispositivo.Fecha,
-                    Hora = dispositivo.Hora
+                    Fecha = santiagoTime.ToString("yyyy-MM-dd"),
+                    Hora = santiagoTime.ToString("HH:mm:ss")
                 };
 
                 var salidaGuardada = _registroSalidaRepo.Agregar(salida);
