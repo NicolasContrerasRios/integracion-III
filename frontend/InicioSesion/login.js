@@ -14,7 +14,7 @@ function iniciarSesion() {
     const clave = document.getElementById("clave").value.trim();
 
     if (!usuario || !clave) {
-        alert("Completa todos los campos");
+        mostrarMensaje("Completa todos los campos", "error");
         return;
     }
 
@@ -44,7 +44,23 @@ function iniciarSesion() {
     })
     .catch(err => {
         console.error("Error login:", err);
-        alert(err.message);
+        mostrarMensaje(err.message, "error");
     });
 
+}
+
+
+//FUNCION PARA MOSTRAR MENSAJE DE COMPLETAR CAMPOS
+
+function mostrarMensaje(texto, tipo) {
+
+    const mensaje = document.getElementById("mensaje-login");
+
+    mensaje.textContent = texto;
+    mensaje.className = "mensaje-login " + tipo;
+
+    setTimeout(() => {
+        mensaje.className = "mensaje-login";
+        mensaje.textContent = "";
+    }, 3000);
 }
