@@ -41,6 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
         actualizarHistorial();
     });
 
+    const inputPatente = document.getElementById("ingresar-patente");
+
+    if (inputPatente) {
+        inputPatente.addEventListener("input", () => {
+            inputPatente.value = inputPatente.value.toUpperCase();
+        });
+}
+
 });
 // LOGOUT 
 const btnLogout = document.getElementById("btnLogout");
