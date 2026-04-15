@@ -35,11 +35,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //FILTROS
-    document.getElementById("btn-filtrar-ingreso")
-    ?.addEventListener("click", () => {
-        paginaIngreso = 1;
-        actualizarHistorial();
-    });
+ document.getElementById("btn-filtrar-ingreso")
+?.addEventListener("click", () => {
+
+    const patente = document.getElementById("input-buscar-ingreso").value.trim();
+
+    if (patente !== "") {
+
+        if (patente.length < 6) {
+            mostrarMensaje("Error", "La patente debe tener 6 caracteres");
+            return;
+        }
+
+        const letras = patente.substring(0, 4);
+        const numeros = patente.substring(4, 6);
+
+        if (!/^[A-Z]{4}$/.test(letras)) {
+            mostrarMensaje("Error", "Los primeros 4 caracteres deben ser letras");
+            return;
+        }
+
+        if (!/^[0-9]{2}$/.test(numeros)) {
+            mostrarMensaje("Error", "Los últimos 2 caracteres deben ser números");
+            return;
+        }
+    }
+
+    paginaIngreso = 1;
+    actualizarHistorial();
+});
 
     const inputPatente = document.getElementById("ingresar-patente");
 
@@ -57,6 +81,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    const inputBuscarIngreso = document.getElementById("input-buscar-ingreso");
+
+    if (inputBuscarIngreso) {
+        inputBuscarIngreso.addEventListener("input", () => {
+            inputBuscarIngreso.value = inputBuscarIngreso.value
+                .toUpperCase()
+                .replace(/[^A-Z0-9]/g, "");
+        });
+    }
+
     document.getElementById("btn-limpiar-filtros")
     ?.addEventListener("click", () => {
 
@@ -65,8 +99,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     paginaIngreso = 1;
     actualizarHistorial();
-});
 
+    });
+
+    document.getElementById("btn-filtrar-vehiculo")
+    ?.addEventListener("click", filtrarListaVehiculos);
+
+    document.getElementById("input-buscar-vehiculo")
+    ?.addEventListener("input", () => {
+        filtrarListaVehiculos();
+    });
 
 
 });
@@ -441,21 +483,8 @@ function cargarListaVehiculos() {
         .then(res => res.json())
         .then(data => {
 
-            const lista = document.getElementById("lista-vehiculos");
-            lista.innerHTML = "";
-
-            data.forEach(v => {
-
-                const item = document.createElement("p");
-                item.textContent = v.patente;
-
-                // CLICK
-                item.addEventListener("click", () => {
-                    seleccionarVehiculo(v);
-                });
-
-                lista.appendChild(item);
-            });
+            window.listaVehiculosGlobal = data;
+            mostrarListaVehiculos(data);
 
         })
         .catch(err => console.error("Error lista vehículos:", err));
@@ -479,6 +508,40 @@ function seleccionarVehiculo(v) {
             break;
         }
     }
+}
+
+function mostrarListaVehiculos(vehiculos) {
+
+    const lista = document.getElementById("lista-vehiculos");
+    lista.innerHTML = "";
+
+    vehiculos.forEach(v => {
+
+        const item = document.createElement("p");
+        item.textContent = v.patente;
+
+        item.addEventListener("click", () => {
+            seleccionarVehiculo(v);
+        });
+
+        lista.appendChild(item);
+    });
+}
+
+function filtrarListaVehiculos() {
+
+    const texto = document.getElementById("input-buscar-vehiculo")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const datos = window.listaVehiculosGlobal || [];
+
+    const filtrados = datos.filter(v =>
+        v.patente.toUpperCase().includes(texto)
+    );
+
+    mostrarListaVehiculos(filtrados);
 }
 
 function guardarCambios() {
