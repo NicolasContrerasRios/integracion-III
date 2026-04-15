@@ -12,14 +12,17 @@ namespace backend.Controllers
     public class RegistroController : ControllerBase
     {
         private readonly IOrdenRepository _ordenRepo;
+
+        private readonly IVehiculoRepository _vehiculoRepo;
         private readonly IRegistroEntradaRepository _registroEntradaRepo;
         private readonly IRegistroSalidaRepository _registroSalidaRepo;
         private readonly ITurnoRepository _turnoRepo;
         private readonly IConductorRepository _conductorRepo;
 
-        public RegistroController(IOrdenRepository ordenRepo, IRegistroEntradaRepository registroEntradaRepo, IRegistroSalidaRepository registroSalidaRepo, ITurnoRepository turnoRepo, IConductorRepository conductorRepo)
+        public RegistroController(IOrdenRepository ordenRepo, IVehiculoRepository vehiculoRepo, IRegistroEntradaRepository registroEntradaRepo, IRegistroSalidaRepository registroSalidaRepo, ITurnoRepository turnoRepo, IConductorRepository conductorRepo)
         {
             _ordenRepo = ordenRepo;
+            _vehiculoRepo = vehiculoRepo;
             _registroEntradaRepo = registroEntradaRepo;
             _registroSalidaRepo = registroSalidaRepo;
             _turnoRepo = turnoRepo;
@@ -53,7 +56,7 @@ namespace backend.Controllers
 
             return Ok(resultado);
         }
-
+        
         [HttpPost]
         public IActionResult PostIOT([FromBody] DispositivoIOT dispositivo)
         {
@@ -75,6 +78,15 @@ namespace backend.Controllers
                 };
 
                 var entradaGuardada = _registroEntradaRepo.Agregar(entrada);
+                
+                // Actualizar estado del vehículo a "Disponible"
+                var vehiculo = _vehiculoRepo.ObtenerTodos().FirstOrDefault(v => v.Patente == dispositivo.Patente);
+                if (vehiculo != null)
+                {
+                    vehiculo.Estado = "Disponible";
+                    _vehiculoRepo.Modificar(vehiculo);
+                }
+                
                 var salidas = _registroSalidaRepo.ObtenerTodos();
 
                 if (ObtenerSalidaAnteriorSinOrden(dispositivo.Patente, salidas, ordenes, out var salidaNoRegistrada) && salidaNoRegistrada != null)
@@ -118,6 +130,15 @@ namespace backend.Controllers
                 };
 
                 var salidaGuardada = _registroSalidaRepo.Agregar(salida);
+                
+                // Actualizar estado del vehículo a "En transito"
+                var vehiculo = _vehiculoRepo.ObtenerTodos().FirstOrDefault(v => v.Patente == dispositivo.Patente);
+                if (vehiculo != null)
+                {
+                    vehiculo.Estado = "En transito";
+                    _vehiculoRepo.Modificar(vehiculo);
+                }
+                
                 return Ok(new
                 {
                     mensaje = "Salida registrada.",
