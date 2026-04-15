@@ -119,25 +119,23 @@
 <section id="vista-ingresosalida" class="vista">
     <h2 style="text-align:center;">Ingreso y Salida</h2>
 
-    <div class="barra-superior">
+<div class="barra-superior">
 
-        <div class="filtros-izquierda">
-            <div class="buscador">
-                <span class="icono-buscar">&#128269;</span>
-                <input type="text" placeholder="Buscar Patente..." id="input-buscar-ingreso">
-            </div>
-
-            <div class="icono-calendario">
-                <input type="date" id="fechaFiltro">
-            </div>
+    <div class="filtros-izquierda">
+        <div class="buscador">
+            <span class="icono-buscar">🔍</span>
+            <input type="text" id="input-buscar-ingreso" placeholder="Buscar Patente...">
         </div>
 
-        <div class="filtros-derecha">
-            <button id="btn-filtrar-ingreso" class="btn-guardar">Filtrar</button>
-        </div>
-
+        <input type="date" id="fechaFiltro">
     </div>
 
+    <div class="filtros-derecha">
+        <button id="btn-filtrar-ingreso">Filtrar</button>
+        <button id="btn-limpiar-filtros">Limpiar filtros</button>
+    </div>
+
+</div>
 <div class="tabla-container">
 
     <table class="tabla-ingreso">
@@ -272,8 +270,8 @@
             <h3>Agregar Vehículo</h3>
 
             <div class="form-grid">
-                <input id="ingresar-patente" placeholder="Patente">
-                <input id="ingresar-nombre-camion" placeholder="Nombre camión">
+                <input id="ingresar-patente" placeholder="Patente" maxlength="6">
+                <input id="ingresar-nombre-camion" placeholder="Nombre camión" maxlength="40">
                 <select id="ingresar-conductor">
                     <option value="">Seleccionar conductor</option>
                 </select>            
@@ -290,7 +288,7 @@
             <h3>Modificar Vehículo</h3>
 
             <div class="buscador-admin">
-                <input id="input-buscar-vehiculo" type="text" placeholder="Buscar vehículo...">
+                <input id="input-buscar-vehiculo" type="text" placeholder="Buscar vehículo..." maxlength="6">
             </div>
 
             <div class="modificar-container">

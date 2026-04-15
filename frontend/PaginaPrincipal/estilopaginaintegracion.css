@@ -183,23 +183,56 @@ html, body {
     background: #e86d00;
     transform: scale(1.05);
 }
+
 .filtros-izquierda {
     display: flex;
     align-items: center;
-    gap: 0.3vw; 
+    gap: 20px;
 }
 
 .filtros-derecha {
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
-.buscador,
-.icono-calendario {
+.btn-filtrar-container {
     display: flex;
     align-items: center;
-    padding: 0.6vh 1vw;
-    border-radius: 0.8vw;
+    gap: 10px;
+}
+
+#btn-filtrar-ingreso,
+#btn-limpiar-filtros {
+    border: none;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#btn-filtrar-ingreso {
+    background: #ff7a00;
+    color: white;
+}
+
+#btn-filtrar-ingreso:hover {
+    background: #e86d00;
+}
+
+#btn-limpiar-filtros {
+    background: #ff7a00;
+    color: #ffffff;
+}
+
+#btn-filtrar-ingreso:hover {
+    background: #bbb;
+}
+
+#btn-limpiar-filtros:hover {
+    background: #bbb;
 }
 
 /* ========================
