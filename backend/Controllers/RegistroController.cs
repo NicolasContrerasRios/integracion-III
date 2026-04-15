@@ -66,19 +66,19 @@ namespace backend.Controllers
             var tipo = dispositivo.ObtenerTipoRegistro();
             var ordenes = _ordenRepo.ObtenerTodos();
 
+            // Parse and convert to Santiago time
+            var dt = DateTime.ParseExact($"{dispositivo.Fecha} {dispositivo.Hora}", "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            var dto = new DateTimeOffset(dt, TimeSpan.Zero);
+            var santiagoTz = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
+            var santiagoTime = TimeZoneInfo.ConvertTime(dto, santiagoTz);
+
             if (tipo == "entrada")
             {
-                // Parse and convert to Santiago time
-                var dt = DateTime.ParseExact($"{dispositivo.Fecha} {dispositivo.Hora}", "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                var dto = new DateTimeOffset(dt, TimeSpan.Zero);
-                var santiagoTz = TimeZoneInfo.FindSystemTimeZoneById("Pacific SA Standard Time");
-                var santiagoTime = TimeZoneInfo.ConvertTime(dto, santiagoTz);
-
                 var entrada = new RegistroEntrada
                 {
                     Patente = dispositivo.Patente,
-                    Fecha = santiagoTime.ToString("yyyy-MM-dd"),
-                    Hora = santiagoTime.ToString("HH:mm:ss")
+                    Fecha = DateOnly.FromDateTime(santiagoTime.DateTime),
+                    Hora = TimeOnly.FromDateTime(santiagoTime.DateTime)
                 };
 
                 var entradaGuardada = _registroEntradaRepo.Agregar(entrada);
@@ -112,7 +112,7 @@ namespace backend.Controllers
 
             if (tipo == "salida")
             {
-                if (!VerificarRangoHora(dispositivo.Hora))
+                if (!VerificarRangoHora(TimeOnly.Parse(santiagoTime.ToString("HH:mm"))))
                 {
                     return BadRequest(new { mensaje = "La hora de salida está fuera del rango permitido (08:00 - 18:00)." });
                 }
@@ -120,8 +120,8 @@ namespace backend.Controllers
                 var salida = new RegistroSalida
                 {
                     Patente = dispositivo.Patente,
-                    Fecha = santiagoTime.ToString("yyyy-MM-dd"),
-                    Hora = santiagoTime.ToString("HH:mm:ss")
+                    Fecha = DateOnly.FromDateTime(santiagoTime.DateTime),
+                    Hora = TimeOnly.FromDateTime(santiagoTime.DateTime)
                 };
 
                 var salidaGuardada = _registroSalidaRepo.Agregar(salida);
