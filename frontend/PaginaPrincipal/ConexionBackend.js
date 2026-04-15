@@ -49,6 +49,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 }
 
+    document.getElementById("btn-limpiar-filtros")
+    ?.addEventListener("click", () => {
+
+    document.getElementById("input-buscar-ingreso").value = "";
+    document.getElementById("fechaFiltro").value = "";
+
+    paginaIngreso = 1;
+    actualizarHistorial();
+});
+
+
+
 });
 // LOGOUT 
 const btnLogout = document.getElementById("btnLogout");
