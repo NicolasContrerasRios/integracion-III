@@ -307,12 +307,62 @@ function actualizarVehiculos() {
 
 function agregarVehiculo() {
 
-    const patente = document.getElementById("ingresar-patente").value.trim();
+    const patente = document.getElementById("ingresar-patente").value.trim().toUpperCase();
     const nombre = document.getElementById("ingresar-nombre-camion").value.trim();
     const rutConductor = document.getElementById("ingresar-conductor").value;
 
+    // actualizar visualmente el input a mayúsculas
+    document.getElementById("ingresar-patente").value = patente;
+
     if (!patente || !nombre || !rutConductor) {
         mostrarMensaje("Error", "Completa todos los campos");
+        return;
+    }
+
+    // patente debe tener exactamente 6 caracteres
+    if (patente.length < 6) {
+        mostrarMensaje("Error", "La patente debe tener al menos 6 caracteres");
+        return;
+    }
+
+    if (patente.length > 6) {
+        mostrarMensaje("Error", "La patente debe tener máximo 6 caracteres");
+        return;
+    }
+
+    // validar formato ABCD12
+    const letras = patente.substring(0, 4);
+    const numeros = patente.substring(4, 6);
+
+    if (!/^[A-Z]{4}$/.test(letras)) {
+        mostrarMensaje("Error", "Los primeros 4 caracteres deben ser letras");
+        return;
+    }
+
+    if (!/^[0-9]{2}$/.test(numeros)) {
+        mostrarMensaje("Error", "Los últimos 2 caracteres deben ser números");
+        return;
+    }
+
+    // nombre mínimo
+    if (nombre.length < 3) {
+        mostrarMensaje("Error", "El nombre del camión debe tener al menos 3 caracteres");
+        return;
+    }
+
+    // validar nombre: solo letras, números y espacios
+    if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/.test(nombre)) {
+        mostrarMensaje("Error", "El nombre solo puede contener letras y números");
+        return;
+    }
+
+    // validar que no exista ya la patente
+    const existePatente = (window.vehiculosGlobal || []).some(v =>
+        v.patente.toUpperCase() === patente
+    );
+
+    if (existePatente) {
+        mostrarMensaje("Error", "La patente ya existe");
         return;
     }
 
@@ -322,7 +372,6 @@ function agregarVehiculo() {
         guardarVehiculoReal();
     });
 }
-
 function cargarConductores() {
 
     fetch("http://localhost:5087/api/vehiculo/conductores")
