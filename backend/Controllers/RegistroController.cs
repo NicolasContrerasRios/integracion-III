@@ -125,10 +125,10 @@ namespace backend.Controllers
 
             if (tipo == "salida")
             {
-                if (!VerificarRangoHora(TimeOnly.Parse(dispositivo.Hora.ToString("HH:mm:ss"))))
+                /*if (!VerificarRangoHora(TimeOnly.Parse(dispositivo.Hora.ToString("HH:mm:ss"))))
                 {
                     return BadRequest(new { mensaje = "La hora de salida está fuera del rango permitido (08:00 - 18:00)." });
-                }
+                } */
 
                 var salida = new RegistroSalida
                 {
