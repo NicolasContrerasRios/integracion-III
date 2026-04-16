@@ -125,7 +125,7 @@ if (btnLogout) {
             if (!ok) return;
 
             localStorage.removeItem("usuario");
-            window.location.replace("/frontend/inicioSesion/iniciosesionweb.html");
+            window.location.replace("/integracion-III/frontend/inicioSesion/iniciosesionweb.html");
         });
 
     });
